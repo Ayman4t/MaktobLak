@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MaktobLak | مكتوب لك — أرشيف الرسائل التي لم تُرسل</title>
+<meta name="description" content="MaktobLak (مكتوب لك) — جوابات ما وصلتش. مساحة مجهولة وآمنة لكتابة الرسائل التي عجزت عن إرسالها، أو البحث باسمك لاكتشاف ما كُتب لك سرّاً.">
+<meta name="theme-color" content="#0b0f17">
+<meta property="og:title" content="MaktobLak | مكتوب لك — أرشيف الرسائل التي لم تُرسل">
+<meta property="og:description" content="اكتب الرسالة التي عجزت عن إرسالها.. أو ابحث باسمك واكتشف ما كُتب لك سرّاً.">
+<meta property="og:type" content="website">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: { fontFamily: {
+      sans: ['Cairo', 'system-ui', 'sans-serif'],
+      poem: ['Amiri', 'serif'],
+      hand: ['"Aref Ruqaa"', 'Amiri', 'serif']
+    } } }
+  };
+</script>
+
+<!-- html2canvas (Story engine) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!--
+  GOOGLE ADSENSE: when your site is approved, paste your AdSense loader here:
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+-->
+
+<style>
+  :root{
+    --bg1:#0b0f17; --bg2:#111827;
+    --ink:#ece6dc; --muted:#9aa4b5; --line:rgba(255,255,255,.08);
+    --rose:#fb7185; --blue:#38bdf8; --amber:#fbbf24; --slate:#94a3b8;
+  }
+  *{ -webkit-tap-highlight-color: transparent; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:'Cairo',system-ui,sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);
+    background-attachment:fixed;
+    overflow-x:hidden;
+  }
+  /* ambient glow + grain */
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(620px 420px at 88% -4%, rgba(251,113,133,.13), transparent 62%),
+      radial-gradient(520px 420px at 4% 32%, rgba(56,189,248,.08), transparent 62%),
+      radial-gradient(520px 420px at 62% 104%, rgba(251,191,36,.07), transparent 62%);
+  }
+  body::after{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.06; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .layer{ position:relative; z-index:1; }
+  .font-poem{ font-family:'Amiri',serif; }
+  .font-hand{ font-family:'Aref Ruqaa','Amiri',serif; }
+  .ic{ width:1em; height:1em; flex:none; }
+  :focus-visible{ outline:2px solid var(--amber); outline-offset:2px; border-radius:8px; }
+  ::selection{ background:rgba(251,113,133,.35); }
+  ::-webkit-scrollbar{ width:10px; } ::-webkit-scrollbar-thumb{ background:#243044; border-radius:10px; }
+
+  .glass{ background:rgba(255,255,255,.035); border:1px solid var(--line); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+
+  /* Header */
+  .site-header{ position:sticky; top:0; z-index:40; background:rgba(11,15,23,.72); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+  .btn-write{
+    display:inline-flex; align-items:center; gap:.5rem; padding:.6rem 1.1rem; border-radius:999px; font-weight:700; font-size:.92rem; color:#1a1014;
+    background:linear-gradient(135deg,#fda4af,#fb7185); box-shadow:0 8px 28px -10px rgba(251,113,133,.7); transition:transform .2s, box-shadow .2s;
+  }
+  .btn-write:hover{ transform:translateY(-2px); box-shadow:0 12px 32px -8px rgba(251,113,133,.85); }
+  .fab{ position:fixed; z-index:45; bottom:1.1rem; left:1.1rem; padding:.85rem 1.2rem; font-size:.95rem; }
+  @media(min-width:768px){ .fab{ display:none; } }
+
+  /* Search */
+  .search-wrap{ position:relative; max-width:760px; margin-inline:auto; }
+  .search-input{
+    width:100%; font-family:'Cairo',sans-serif; font-size:1.2rem; padding:1.15rem 1.5rem; padding-inline-end:3.4rem; border-radius:22px; color:#fff;
+    background:rgba(255,255,255,.05); border:1.5px solid rgba(255,255,255,.12); transition:border-color .25s, box-shadow .25s, background .25s;
+  }
+  @media(min-width:640px){ .search-input{ font-size:1.4rem; padding-block:1.35rem; } }
+  .search-input::placeholder{ color:#7c8798; font-size:.95em; }
+  .search-input:focus{ outline:none; border-color:var(--rose); background:rgba(255,255,255,.07); box-shadow:0 0 0 5px rgba(251,113,133,.14), 0 20px 60px -20px rgba(251,113,133,.35); }
+  .search-clear{ position:absolute; inset-inline-end:1rem; top:50%; transform:translateY(-50%); width:2.1rem; height:2.1rem; border-radius:50%; display:none; align-items:center; justify-content:center; color:var(--muted); background:rgba(255,255,255,.07); }
+  .search-clear.show{ display:flex; }
+  .match-badge{ display:inline-flex; align-items:center; gap:.4rem; padding:.45rem 1rem; border-radius:999px; font-size:.95rem; background:rgba(251,113,133,.12); color:#fecdd3; border:1px solid rgba(251,113,133,.3); animation:pop .35s ease; }
+  .match-badge.none{ background:rgba(148,163,184,.1); color:#cbd5e1; border-color:rgba(148,163,184,.25); }
+  .hint-chip{ padding:.25rem .8rem; border-radius:999px; font-size:.82rem; color:var(--muted); border:1px dashed rgba(255,255,255,.16); transition:all .2s; }
+  .hint-chip:hover{ color:#fff; border-color:var(--rose); background:rgba(251,113,133,.08); }
+
+  /* Filter chips */
+  .chip{ --accent:#e5e7eb; padding:.5rem 1rem; border-radius:999px; font-size:.9rem; font-weight:600; color:var(--muted); background:rgba(255,255,255,.04); border:1px solid var(--line); transition:all .2s; white-space:nowrap; }
+  .chip:hover{ color:#fff; border-color:color-mix(in srgb,var(--accent) 50%,transparent); }
+  .chip.active{ color:#0b0f17; background:var(--accent); border-color:var(--accent); box-shadow:0 8px 24px -10px var(--accent); }
+
+  /* Masonry */
+  .masonry{ column-count:1; column-gap:1.25rem; }
+  @media(min-width:680px){ .masonry{ column-count:2; } }
+  @media(min-width:1040px){ .masonry{ column-count:3; } }
+
+  .card{
+    position:relative; break-inside:avoid; margin-bottom:1.25rem; border-radius:20px; padding:1.35rem 1.4rem 1rem; overflow:hidden;
+    background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.02)); border:1px solid var(--line);
+    transition:transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .card::before{ content:''; position:absolute; inset-inline:0; top:0; height:3px; background:var(--accent); opacity:.9; }
+  .card::after{ content:''; position:absolute; top:-70px; inset-inline-start:-70px; width:200px; height:200px; border-radius:50%; background:var(--accent); opacity:.08; filter:blur(34px); pointer-events:none; }
+  .card:hover{ transform:translateY(-3px); border-color:color-mix(in srgb,var(--accent) 45%,transparent); box-shadow:0 16px 44px -18px color-mix(in srgb,var(--accent) 60%,transparent); }
+  .card.enter{ animation:rise .6s cubic-bezier(.2,.8,.2,1) both; }
+  .card.glow{ animation:glow 2.6s ease 1; border-color:var(--accent); }
+  .card .to{ font-size:.82rem; color:var(--muted); }
+  .card .to b{ font-family:'Aref Ruqaa','Amiri',serif; font-weight:700; font-size:1.45rem; color:var(--accent); margin-inline-start:.25rem; }
+  .pill{ display:inline-flex; align-items:center; gap:.3rem; padding:.16rem .65rem; border-radius:999px; font-size:.72rem; font-weight:600; white-space:nowrap; color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,transparent); border:1px solid color-mix(in srgb,var(--accent) 35%,transparent); }
+  .poem{ font-family:'Amiri',serif; font-size:1.3rem; line-height:2.05; white-space:pre-line; color:#efe8dc; margin-block:.9rem .6rem; word-break:break-word; }
+  .poem::before{ content:'“'; color:var(--accent); opacity:.7; font-size:1.8em; line-height:0; vertical-align:-.35em; margin-inline-end:.15rem; }
+  .poem::after{ content:'”'; color:var(--accent); opacity:.7; font-size:1.8em; line-height:0; vertical-align:-.35em; margin-inline-start:.15rem; }
+  .from{ font-family:'Aref Ruqaa','Amiri',serif; color:#c9c2b6; font-size:1.05rem; }
+  .date{ font-size:.74rem; color:#728098; }
+  .actions{ display:flex; align-items:center; gap:.2rem; margin-top:.8rem; padding-top:.7rem; border-top:1px dashed rgba(255,255,255,.09); flex-wrap:wrap; }
+  .act{ display:inline-flex; align-items:center; gap:.4rem; padding:.42rem .7rem; border-radius:999px; font-size:.78rem; color:var(--muted); transition:all .2s; }
+  .act:hover{ background:rgba(255,255,255,.07); color:#fff; }
+  .act.liked{ color:#fb7185; }
+  .act.liked .ic{ fill:currentColor; animation:beat .45s ease; }
+  .act.report{ margin-inline-start:auto; }
+  .act.report:hover{ color:#fca5a5; }
+
+  /* Ads (fixed height => CLS 0) */
+  .ad-slot{ display:flex; align-items:center; justify-content:center; border-radius:14px; border:1px dashed rgba(255,255,255,.08); background:rgba(255,255,255,.015); color:#475167; font-size:.7rem; letter-spacing:.04em; overflow:hidden; }
+  .ad-top{ height:100px; width:100%; max-width:970px; margin-inline:auto; }
+  .ad-card{ break-inside:avoid; margin-bottom:1.25rem; height:280px; }
+
+  /* Drawer */
+  .backdrop{ position:fixed; inset:0; z-index:55; background:rgba(3,6,12,.6); backdrop-filter:blur(3px); opacity:0; visibility:hidden; transition:opacity .35s, visibility .35s; }
+  .backdrop.open{ opacity:1; visibility:visible; }
+  .drawer{
+    position:fixed; top:0; bottom:0; left:0; width:min(100%,480px); z-index:60; overflow-y:auto;
+    transform:translateX(-104%); visibility:hidden; transition:transform .45s cubic-bezier(.2,.8,.2,1), visibility .45s;
+    background:linear-gradient(180deg,#121826,#0d121c); border-inline-end:1px solid var(--line); box-shadow:30px 0 80px -30px rgba(0,0,0,.8);
+  }
+  .drawer.open{ transform:none; visibility:visible; }
+  .field{ width:100%; padding:.85rem 1rem; border-radius:14px; color:#fff; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); transition:border-color .2s, box-shadow .2s; font-size:1rem; }
+  .field:focus{ outline:none; border-color:var(--rose); box-shadow:0 0 0 4px rgba(251,113,133,.13); }
+  textarea.field{ font-family:'Amiri',serif; font-size:1.3rem; line-height:2; resize:none; min-height:210px; }
+  .mood-btn{ --accent:#fff; display:flex; flex-direction:column; align-items:center; gap:.2rem; padding:.7rem .4rem; border-radius:14px; font-size:.82rem; font-weight:600; color:var(--muted); background:rgba(255,255,255,.04); border:1.5px solid var(--line); transition:all .2s; }
+  .mood-btn .em{ font-size:1.5rem; }
+  .mood-btn:hover{ color:#fff; }
+  .mood-btn[aria-checked="true"]{ color:#fff; border-color:var(--accent); background:color-mix(in srgb,var(--accent) 16%,transparent); box-shadow:0 8px 26px -12px var(--accent); }
+  .counter{ font-size:.78rem; color:#728098; }
+  .counter.warn{ color:var(--amber); } .counter.max{ color:#f87171; }
+
+  /* Modals */
+  .modal{ position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center; padding:1rem; background:rgba(3,6,12,.72); backdrop-filter:blur(4px); }
+  .modal.open{ display:flex; animation:fade .25s ease; }
+  .modal-box{ width:min(100%,640px); max-height:88vh; overflow:auto; border-radius:22px; padding:1.6rem; background:linear-gradient(180deg,#141b2a,#0e131e); border:1px solid var(--line); box-shadow:0 40px 120px -30px #000; animation:rise .4s cubic-bezier(.2,.8,.2,1); }
+  .prose-ar h4{ color:#fff; font-weight:700; margin-top:1.1rem; margin-bottom:.35rem; }
+  .prose-ar p,.prose-ar li{ color:#b8c0cf; line-height:2; font-size:.95rem; }
+  .prose-ar ul{ list-style:disc; padding-inline-start:1.3rem; }
+
+  /* Sent overlay */
+  .sent{ position:fixed; inset:0; z-index:90; display:none; flex-direction:column; align-items:center; justify-content:center; gap:1rem; text-align:center; padding:2rem; background:radial-gradient(circle at 50% 40%, rgba(251,113,133,.14), rgba(7,10,16,.96) 70%); }
+  .sent.open{ display:flex; animation:fade .3s ease; }
+  .dove{ font-size:5rem; animation:fly 2.4s ease-in-out both; filter:drop-shadow(0 10px 30px rgba(251,113,133,.5)); }
+
+  /* Toast */
+  .toast{ position:fixed; z-index:100; bottom:1.4rem; left:50%; transform:translate(-50%,30px); opacity:0; pointer-events:none; display:flex; align-items:center; gap:.9rem; padding:.75rem 1.1rem; border-radius:14px; font-size:.9rem; color:#fff; background:#1b2434; border:1px solid rgba(255,255,255,.12); box-shadow:0 20px 60px -20px #000; transition:all .35s; max-width:92vw; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); pointer-events:auto; }
+  .toast button{ color:var(--amber); font-weight:700; }
+
+  .spinner{ width:42px; height:42px; border-radius:50%; border:3px solid rgba(255,255,255,.15); border-top-color:var(--rose); animation:spin .9s linear infinite; }
+
+  @keyframes rise{ from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none} }
+  @keyframes fade{ from{opacity:0} to{opacity:1} }
+  @keyframes pop{ from{opacity:0; transform:scale(.92)} to{opacity:1; transform:none} }
+  @keyframes beat{ 0%{transform:scale(1)} 40%{transform:scale(1.4)} 100%{transform:scale(1)} }
+  @keyframes spin{ to{ transform:rotate(360deg) } }
+  @keyframes glow{ 0%,100%{ box-shadow:0 0 0 0 transparent } 30%{ box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 30%,transparent), 0 0 60px -6px var(--accent) } }
+  @keyframes fly{ 0%{ transform:translate(60px,60px) scale(.5) rotate(10deg); opacity:0 } 35%{ opacity:1 } 100%{ transform:translate(0,0) scale(1) rotate(0); opacity:1 } }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-6px) } }
+  .floaty{ animation:floaty 5s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } html{ scroll-behavior:auto; } }
+</style>
+</head>
+
+<body>
+<noscript><p style="padding:2rem;text-align:center">يحتاج MaktobLak إلى تفعيل JavaScript ليعمل.</p></noscript>
+
+<div class="layer">
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-3" aria-label="MaktobLak">
+        <span class="w-10 h-10 rounded-xl flex items-center justify-center text-rose-300" style="background:linear-gradient(135deg,rgba(251,113,133,.25),rgba(251,191,36,.12));border:1px solid rgba(251,113,133,.3)">
+          <span data-icon="mail" data-cls="w-5 h-5"></span>
+        </span>
+        <span class="leading-tight">
+          <span class="block font-extrabold text-lg tracking-wide">MaktobLak</span>
+          <span class="block font-hand text-sm text-rose-200/80">مكتوب لك</span>
+        </span>
+      </a>
+      <button type="button" class="btn-write hidden md:inline-flex" data-open-drawer>
+        <span data-icon="pen" data-cls="w-4 h-4"></span> اكتب رسالة سرية ✍️
+      </button>
+      <button type="button" class="md:hidden text-sm text-slate-300 px-3 py-2 rounded-lg glass" data-open-drawer>+ رسالة</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ================= HERO ================= -->
+    <section class="max-w-6xl mx-auto px-4 pt-10 sm:pt-16 pb-6 text-center">
+      <p class="font-hand text-rose-300/90 text-xl floaty">جوابات ما وصلتش</p>
+      <h1 class="font-hand font-bold text-4xl sm:text-6xl mt-2 leading-[1.5]" style="text-shadow:0 6px 40px rgba(251,113,133,.25)">أرشيف الرسائل التي لم تُرسل</h1>
+      <p class="mt-3 text-slate-300/90 text-base sm:text-xl max-w-2xl mx-auto leading-loose">اكتب الرسالة التي عجزت عن إرسالها.. أو ابحث باسمك واكتشف ما كُتب لك سرّاً.</p>
+
+      <form class="search-wrap mt-8" role="search" onsubmit="return false">
+        <label for="search" class="sr-only">ابحث باسمك</label>
+        <input id="search" type="search" class="search-input" autocomplete="off" inputmode="search" maxlength="40"
+               placeholder="🔍 اكتب اسمك هنا (مثلاً: سارة، أحمد، نور، مريم...)">
+        <button type="button" id="searchClear" class="search-clear" aria-label="مسح البحث"><span data-icon="x" data-cls="w-4 h-4"></span></button>
+      </form>
+
+      <div class="mt-3 flex flex-wrap items-center justify-center gap-2" id="nameHints" aria-label="أسماء مقترحة">
+        <span class="text-xs text-slate-500">جرّب:</span>
+        <button type="button" class="hint-chip" data-name="سارة">سارة</button>
+        <button type="button" class="hint-chip" data-name="أحمد">أحمد</button>
+        <button type="button" class="hint-chip" data-name="نور">نور</button>
+        <button type="button" class="hint-chip" data-name="مريم">مريم</button>
+        <button type="button" class="hint-chip" data-name="عمر">عمر</button>
+        <button type="button" class="hint-chip" data-name="ياسمين">ياسمين</button>
+      </div>
+
+      <div class="mt-5 min-h-[2.6rem] flex items-center justify-center" aria-live="polite"><div id="matchBadge"></div></div>
+
+      <!-- Emotion filters -->
+      <div class="mt-3 flex gap-2 justify-start sm:justify-center overflow-x-auto pb-2 px-1" id="moodFilters" role="tablist" aria-label="تصفية حسب الشعور">
+        <button type="button" class="chip active" data-mood="all" style="--accent:#e5e7eb" role="tab" aria-selected="true">الكل 🌐</button>
+        <button type="button" class="chip" data-mood="love" style="--accent:#fb7185" role="tab" aria-selected="false">حنين واعتراف 🌸</button>
+        <button type="button" class="chip" data-mood="blame" style="--accent:#38bdf8" role="tab" aria-selected="false">عتاب 💙</button>
+        <button type="button" class="chip" data-mood="thanks" style="--accent:#fbbf24" role="tab" aria-selected="false">امتنان 💛</button>
+        <button type="button" class="chip" data-mood="goodbye" style="--accent:#94a3b8" role="tab" aria-selected="false">وداع 🖤</button>
+      </div>
+      <p class="text-xs text-slate-500 mt-2"><span id="totalCount">0</span> رسالة محفوظة في الأرشيف</p>
+    </section>
+
+    <!-- ================= AD TOP ================= -->
+    <div class="max-w-6xl mx-auto px-4 mt-2">
+      <div class="ad-slot ad-top" role="complementary" aria-label="مساحة إعلانية">
+        <span>مساحة إعلانية</span>
+        <!-- Paste AdSense <ins class="adsbygoogle" ...> unit here (keep the fixed height above) -->
+      </div>
+    </div>
+
+    <!-- ================= GRID ================= -->
+    <section class="max-w-6xl mx-auto px-4 mt-8" aria-label="الرسائل">
+      <div id="grid" class="masonry"></div>
+      <div id="emptyState" class="hidden text-center py-16 glass rounded-3xl">
+        <div class="text-5xl mb-3">🕊️</div>
+        <p class="font-hand text-2xl text-slate-200 leading-loose" id="emptyText">لا توجد رسائل هنا بعد.</p>
+        <p class="text-slate-400 mt-1">ربما لم يجرؤ أحد على كتابتها حتى الآن.. كن أنت الأول.</p>
+        <button type="button" class="btn-write mt-5" id="emptyWrite"><span data-icon="pen" data-cls="w-4 h-4"></span> <span id="emptyWriteLabel">اكتب رسالة سرية</span></button>
+      </div>
+    </section>
+
+    <!-- ================= EDITORIAL (AdSense value content) ================= -->
+    <section id="about-writing" class="max-w-3xl mx-auto px-4 mt-20">
+      <article class="glass rounded-3xl p-6 sm:p-10">
+        <h2 class="font-hand font-bold text-3xl sm:text-4xl text-rose-200 leading-[1.7]">عن العلاج بالكتابة والرسائل غير المرسلة في علم النفس</h2>
+        <div class="prose-ar mt-4">
+          <p>حين تعجز الكلمات عن الخروج من الصدر إلى الفم، قد تجد طريقها بسهولة إلى الورق. الرسائل غير المرسلة تقنية معروفة في الإرشاد النفسي، يكتب فيها الشخص كل ما يشعر به تجاه إنسان آخر — حيّاً كان أو راحلاً — دون أن يُلزم نفسه بإرسالها. الفكرة بسيطة: أن تمنح مشاعرك مساحة آمنة للتعبير بلا خوف من الرد أو الحكم أو العواقب.</p>
+          <p>ارتبط هذا الأسلوب بأبحاث «الكتابة التعبيرية» التي بدأها عالم النفس جيمس بينيبيكر في ثمانينيات القرن الماضي، وتشير دراسات عديدة إلى أن الكتابة المنتظمة عن التجارب العاطفية الثقيلة، لبضع دقائق في كل مرة، قد ترتبط بتحسّن المزاج وانخفاض التوتر وتحسّن النوم لدى بعض الأشخاص. كما يستخدم المعالجون تمارين قريبة منها في حالات الحداد والفقد، مثل تقنية «الكرسي الفارغ» التي يخاطب فيها المرء شخصاً غائباً بصدق كامل.</p>
+          <h4>لماذا تساعد الكتابة؟</h4>
+          <ul>
+            <li>تحوّل المشاعر المبعثرة إلى سرد مرتب، فيمنحك ذلك إحساساً بالسيطرة والفهم.</li>
+            <li>تفرّغ ما نكتمه عادةً — الغضب والذنب والاشتياق — دون أن تؤذي أحداً.</li>
+            <li>تصنع مسافة بينك وبين الألم، فتراه بوضوح أكبر بدل أن تعيشه من الداخل فقط.</li>
+            <li>تساعد على إغلاق الحلقات المفتوحة: اعتذار لم يُقل، شكر تأخر، أو وداع لم يحدث.</li>
+          </ul>
+          <h4>كيف تكتب رسالتك؟</h4>
+          <p>ابدأ باسم الشخص واكتب بصدق دون تنميق. قل ما حدث وما شعرت به وما تتمنى لو قيل. لا تراجع الإملاء ولا تحاول أن تكون منصفاً أو بليغاً؛ هذه رسالة لك قبل أن تكون لأي أحد. وحين تنتهي، خذ نفَساً عميقاً وانتبه لما تغيّر داخلك. يمكنك الاحتفاظ بالرسالة لنفسك، أو إيداعها هنا مجهولة الاسم لتجد من يشعر بها.</p>
+          <p class="text-sm text-slate-400 border-t border-white/10 pt-4 mt-4">تنبيه: الكتابة التعبيرية وسيلة مساندة وليست بديلاً عن العلاج النفسي المتخصص. إذا شعرت أن الألم يفوق قدرتك على التحمل، فلا تتردد في التحدث إلى مختص نفسي أو إلى شخص تثق به.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-20 border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 text-center">
+      <div class="font-extrabold text-lg">MaktobLak <span class="font-hand font-normal text-rose-200/80">· مكتوب لك</span></div>
+      <p class="text-slate-400 text-sm mt-1">جوابات ما وصلتش — The Unsent Archive</p>
+      <nav class="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-300" aria-label="روابط قانونية">
+        <button type="button" class="hover:text-white underline-offset-4 hover:underline" data-info="privacy">سياسة الخصوصية وحماية المجهولية</button>
+        <button type="button" class="hover:text-white underline-offset-4 hover:underline" data-info="standards">معايير النشر ومكافحة التنمر</button>
+        <button type="button" class="hover:text-white underline-offset-4 hover:underline" data-info="terms">شروط الاستخدام وعن المنصة</button>
+      </nav>
+      <p class="text-xs text-slate-500 mt-6">© <span id="year"></span> MaktobLak. جميع الرسائل مجهولة المصدر وتعبّر عن أصحابها فقط.</p>
+    </div>
+  </footer>
+</div>
+
+<button type="button" class="btn-write fab" data-open-drawer aria-label="اكتب رسالة سرية">
+  <span data-icon="pen" data-cls="w-5 h-5"></span> اكتب رسالة ✍️
+</button>
+
+<!-- ================= SUBMISSION DRAWER ================= -->
+<div id="backdrop" class="backdrop"></div>
+<aside id="drawer" class="drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <form id="letterForm" class="p-6 sm:p-7" novalidate autocomplete="off">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 id="drawerTitle" class="font-hand font-bold text-3xl text-rose-200">صندوق البوح</h2>
+        <p class="text-sm text-slate-400 mt-1">بلا تسجيل، بلا أسماء حقيقية، بلا أثر.</p>
+      </div>
+      <button type="button" id="drawerClose" class="w-10 h-10 rounded-full glass flex items-center justify-center text-slate-300 hover:text-white" aria-label="إغلاق"><span data-icon="x" data-cls="w-5 h-5"></span></button>
+    </div>
+
+    <div class="mt-6">
+      <label for="fRecipient" class="block text-sm font-semibold text-slate-200 mb-2">إلى:</label>
+      <input id="fRecipient" class="field" maxlength="30" placeholder="اسم الشخص الأول أو اللقب" required>
+    </div>
+
+    <div class="mt-5">
+      <span class="block text-sm font-semibold text-slate-200 mb-2" id="moodLabel">ما شعور هذه الرسالة؟</span>
+      <div class="grid grid-cols-4 gap-2" role="radiogroup" aria-labelledby="moodLabel" id="moodPick">
+        <button type="button" class="mood-btn" role="radio" aria-checked="true" data-mood="love" style="--accent:#fb7185"><span class="em">🌸</span>حب / اعتراف</button>
+        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="blame" style="--accent:#38bdf8"><span class="em">💙</span>عتاب</button>
+        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="thanks" style="--accent:#fbbf24"><span class="em">💛</span>امتنان</button>
+        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="goodbye" style="--accent:#94a3b8"><span class="em">🖤</span>وداع</button>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <div class="flex justify-between items-end mb-2">
+        <label for="fMessage" class="block text-sm font-semibold text-slate-200">رسالتك:</label>
+        <span id="counter" class="counter">٠ / ٣٥٠</span>
+      </div>
+      <textarea id="fMessage" class="field" maxlength="350" placeholder="اكتب ما لم تستطع قوله.. كأنه لن يقرأه أحد سواه." required></textarea>
+    </div>
+
+    <div class="mt-5">
+      <label for="fSender" class="block text-sm font-semibold text-slate-200 mb-2">من: <span class="text-slate-500 font-normal">(اختياري)</span></label>
+      <input id="fSender" class="field" maxlength="24" placeholder="مجهول، أو حرف من اسمك - اختياري">
+    </div>
+
+    <!-- honeypot -->
+    <input type="text" id="fWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0">
+
+    <p id="formError" class="text-sm text-rose-300 mt-4 hidden" role="alert"></p>
+
+    <button type="submit" id="submitBtn" class="btn-write w-full justify-center mt-6 py-3.5 text-base">
+      <span data-icon="send" data-cls="w-5 h-5"></span> أودِع الرسالة في الأرشيف
+    </button>
+    <p class="text-xs text-slate-500 mt-4 leading-relaxed text-center">لحماية المجهولية: لا تكتب أسماء كاملة أو أرقام هواتف أو روابط أو عناوين. سنمنع نشرها تلقائياً.</p>
+  </form>
+</aside>
+
+<!-- ================= INFO MODAL ================= -->
+<div id="infoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-2">
+      <h3 id="infoTitle" class="font-hand font-bold text-2xl text-rose-200"></h3>
+      <button type="button" class="w-9 h-9 rounded-full glass flex items-center justify-center" data-close-modal aria-label="إغلاق"><span data-icon="x" data-cls="w-4 h-4"></span></button>
+    </div>
+    <div id="infoBody" class="prose-ar"></div>
+  </div>
+</div>
+
+<!-- ================= STORY MODAL ================= -->
+<div id="storyModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="storyTitle">
+  <div class="modal-box" style="width:min(100%,460px)">
+    <div class="flex items-center justify-between mb-3">
+      <h3 id="storyTitle" class="font-hand font-bold text-2xl text-rose-200">بطاقة الستوري</h3>
+      <button type="button" class="w-9 h-9 rounded-full glass flex items-center justify-center" data-close-modal aria-label="إغلاق"><span data-icon="x" data-cls="w-4 h-4"></span></button>
+    </div>
+    <div id="storyLoading" class="flex flex-col items-center gap-4 py-12">
+      <div class="spinner"></div>
+      <p class="text-slate-300 text-sm">نجهّز بطاقتك بدقة 1080×1920…</p>
+    </div>
+    <div id="storyReady" class="hidden">
+      <img id="storyImg" alt="معاينة بطاقة الستوري" class="w-full rounded-2xl border border-white/10" style="aspect-ratio:9/16;object-fit:cover;background:#0b0f17">
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <button type="button" id="storyShare" class="btn-write justify-center hidden col-span-2"><span data-icon="share" data-cls="w-4 h-4"></span> مشاركة كستوري</button>
+        <button type="button" id="storyDownload" class="act justify-center glass py-3 col-span-2 text-slate-100 text-sm"><span data-icon="download" data-cls="w-4 h-4"></span> تحميل PNG</button>
+      </div>
+      <p id="storyNote" class="text-xs text-slate-400 mt-3 text-center"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SENT OVERLAY ================= -->
+<div id="sent" class="sent" role="status" aria-live="polite">
+  <div class="dove">🕊️</div>
+  <p class="font-hand text-3xl sm:text-4xl text-rose-100 leading-loose">تم إيداع رسالتك في الأرشيف بأمان 🕊️</p>
+  <p class="text-slate-400">ربما تصل يوماً إلى من تقصده..</p>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button type="button" id="toastAct" class="hidden"></button></div>
+
+<script>
+/* =====================================================================
+   MaktobLak — جوابات ما وصلتش | The Unsent Archive
+   Vanilla JS. Dual-mode storage: localStorage (default) / Supabase (optional)
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  /* ---------------------------------------------------------------
+     CONFIG — fill the Supabase keys to switch to Cloud mode.
+     Leave empty to run 100% on localStorage.
+     ---------------------------------------------------------------
+     Supabase SQL (run once in the SQL editor):
+
+       create table public.letters (
+         id uuid primary key default gen_random_uuid(),
+         recipient text not null check (char_length(recipient) <= 30),
+         message   text not null check (char_length(message)   <= 350),
+         mood      text not null check (mood in ('love','blame','thanks','goodbye')),
+         sender    text check (char_length(sender) <= 24),
+         likes     int  not null default 0,
+         created_at timestamptz not null default now()
+       );
+       alter table public.letters enable row level security;
+       create policy "read letters"   on public.letters for select using (true);
+       create policy "insert letters" on public.letters for insert with check (likes = 0);
+
+       create or replace function public.increment_likes(row_id uuid, delta int)
+       returns void language sql security definer as $$
+         update public.letters set likes = greatest(likes + delta, 0) where id = row_id;
+       $$;
+
+       create table public.reports (id bigint generated always as identity primary key, letter_id uuid, created_at timestamptz default now());
+       alter table public.reports enable row level security;
+       create policy "insert reports" on public.reports for insert with check (true);
+
+       -- Enable Realtime on table "letters" (Database → Replication).
+     --------------------------------------------------------------- */
+  const CONFIG = {
+    SUPABASE_URL: '',        // e.g. 'https://xxxx.supabase.co'
+    SUPABASE_ANON_KEY: '',   // your public anon key
+    SITE_DOMAIN: 'maktoblak.app', // shown on the Story card — change to your real domain
+    MAX_MSG: 350, MAX_NAME: 30, MAX_SENDER: 24,
+    COOLDOWN_MS: 20000
+  };
+  const USE_CLOUD = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
+  let sb = null; // supabase client (when available)
+
+  /* ---------- Moods ---------- */
+  const MOODS = {
+    love:    { label: 'حنين واعتراف',  emoji: '🌸', color: '#fb7185' },
+    blame:   { label: 'عتاب',          emoji: '💙', color: '#38bdf8' },
+    thanks:  { label: 'امتنان واشتياق', emoji: '💛', color: '#fbbf24' },
+    goodbye: { label: 'وداع وندم',     emoji: '🖤', color: '#94a3b8' }
+  };
+
+  /* ---------- Icons ---------- */
+  const ICON = {
+    heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+    camera:'<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
+    flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+    x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+    send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+    share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+    download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+    mail:'<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>'
+  };
+  const icon = (n, cls) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ic ' + (cls || '') + '" aria-hidden="true">' + ICON[n] + '</svg>';
+  const paintIcons = (root) => (root || document).querySelectorAll('[data-icon]').forEach(el => {
+    el.innerHTML = icon(el.dataset.icon, el.dataset.cls || 'w-4 h-4');
+    el.style.display = 'inline-flex';
+  });
+
+  /* ---------- Helpers ---------- */
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmt = n => Number(n).toLocaleString('ar-EG');
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage may be blocked */ } }
+  };
+
+  // Arabic normalisation for forgiving name search
+  function norm(s) {
+    return String(s || '').toLowerCase()
+      .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+      .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه')
+      .replace(/ؤ/g, 'و').replace(/ئ/g, 'ي').replace(/\s+/g, ' ').trim();
+  }
+  function lev(a, b) {
+    if (Math.abs(a.length - b.length) > 1) return 2;
+    const m = a.length, n = b.length, d = Array.from({ length: m + 1 }, (_, i) => [i]);
+    for (let j = 1; j <= n; j++) d[0][j] = j;
+    for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[m][n];
+  }
+  function matchesName(recipient, q) {
+    const r = norm(recipient);
+    if (r.includes(q)) return true;
+    if (q.length < 3) return false;
+    return r.split(' ').some(w => w.length >= 3 && lev(w, q) <= 1);
+  }
+
+  // Arabic relative time
+  function timeAgo(ts) {
+    const s = Math.max(1, Math.floor((Date.now() - ts) / 1000));
+    const U = [
+      [60, 'دقيقة', 'دقيقتين', 'دقائق', 'دقيقة', 60],
+      [3600, 'ساعة', 'ساعتين', 'ساعات', 'ساعة', 3600],
+      [86400, 'يوم', 'يومين', 'أيام', 'يومًا', 86400],
+      [604800, 'أسبوع', 'أسبوعين', 'أسابيع', 'أسبوعًا', 604800],
+      [2592000, 'شهر', 'شهرين', 'أشهر', 'شهرًا', 2592000]
+    ];
+    if (s < 60) return 'الآن';
+    let u = U[0];
+    for (const x of U) if (s >= x[0]) u = x;
+    const n = Math.floor(s / u[5]);
+    if (s >= 31536000) return 'منذ أكثر من سنة';
+    const word = n === 1 ? u[1] : n === 2 ? u[2] : fmt(n) + ' ' + (n <= 10 ? u[3] : u[4]);
+    return 'منذ ' + word;
+  }
+  function countWord(n) {
+    if (n === 1) return 'رسالة واحدة';
+    if (n === 2) return 'رسالتين';
+    if (n <= 10) return fmt(n) + ' رسائل';
+    return fmt(n) + ' رسالة';
+  }
+
+  /* ---------- Seed database (38 letters) ----------
+     [recipient, mood, message, sender, hoursAgo, likes] */
+  const SEED_RAW = [
+    ['سارة','love','كنت بستناكي تبصي ناحيتي في المحاضرة، وكل مرة تبصي كنت بعمل نفسي مشغول في الورقة. تلات سنين وأنا بكتب اسمك في آخر صفحة الكراسة وأمسحه. لو يوم قريتي ده، اعرفي إن أحلى حاجة في الكلية كانت إنك قاعدة في الصف التاني.','ح.',5,128],
+    ['أحمد','blame','مكنتش محتاج اعتذار كبير يا أحمد. كنت محتاج بس تسأل عليا مرة واحدة يوم ما بابا تعب. كل الحاجات التانية عدّت، إلا إنك ما كنتش موجود.','صاحبك القديم',9,97],
+    ['نور','thanks','شكراً إنك كنتي بتسمعيني الساعة ٣ الفجر من غير ما تقوليلي إنك تعبانة. أنا لحد النهارده مش عارفة أقولك إني كنت بتهد وإنتي ماسكاني. وحشتيني أوي.','ن',14,143],
+    ['عمر','goodbye','كنت بتقول إن الحاجات الحلوة بتخلص بسرعة، وأنا كنت فاكرها نكتة. وحشتني ضحكتك في العربية، وإنك تغني غلط وتصر إنك صح. ياريتني قلتلك ساعتها إنك أخويا مش بس صاحبي.','',20,211],
+    ['ياسمين','love','لو كنت أعرف إن آخر مرة هشوفك فيها هتبقى في الكافيه ده، كنت قلتلك كل حاجة. مش هقولك دلوقتي إني لسه بحبك، بس هقولك إني لسه بعدي من قدام المكان ده وأبطّئ.','م',26,76],
+    ['علي','blame','قلت لي «هنتكلم بعدين» عشر مرات. العاشرة فهمت إن بعدين دي معناها «مش هنتكلم». كنت أفضّل لو قلتها من الأول بصراحة.','',30,102],
+    ['فريدة','thanks','يا فريدة، إنتي الوحيدة اللي لاحظت إني مش بخير وإحنا بنضحك. شكراً إنك مسكتي إيدي من غير ما تسألي. أنا بقيت أحسن، وكان ليكي نصيب كبير في ده.','رفيقتك',36,88],
+    ['كريم','goodbye','آسف إني مجيتش العزاء. كنت واقف عند باب المستشفى وماقدرتش أدخل. كنت عايز أفتكرك وإنت بتضحك مش وإنت مستلقي. سامحني يا كريم، أنا لسه مش مصدق.','ي',41,187],
+    ['مريم','love','كنت بحب أكتبلك قصايد وأتكسف أطلعها. دلوقتي بقيت بنشر كتابتي وإنتي مش هنا تقرأيها. كل قصيدة فيها حاجة منك، حتى لو ما ذكرتش اسمك.','ك',48,134],
+    ['زينة','blame','كنتِ تقولين لي دائماً إنني قوية، فتركتِني أحمل كل شيء وحدي. القوة لا تعني أنني لا أحتاج أحداً يا زينة. كنت أحتاج أن تسأليني ولو مرة: هل أنتِ بخير؟','أختك',55,119],
+    ['طارق','thanks','يا طارق، إنت اللي علمتني إن الغلط مش عيب والاعتراف بيه شجاعة. أنا النهارده مدير فريق، وكل مرة بقول «عندك حق» بفتكر صوتك. شكراً يا أستاذ.','تلميذك',62,64],
+    ['سارة','goodbye','تعبت من انتظار رد ما بيجيش. قررت أقفل الباب بهدوء من غير خناق. أتمنى لك حياة حلوة يا سارة، وتفتكري إن في حد كان بيحبك بصدق.','',70,92],
+    ['أحمد','love','أحمد، أنا مش جريئة كفاية أقولها لك في وشك، فبكتبها هنا: كل ما تدخل المكتب الدنيا بتنوّر شوية. ومش عارفة أنا اللي بتخيّل ولا إنت فعلاً بتبص ناحيتي.','اللي قصادك في المكتب',80,71],
+    ['نور','blame','وعدتيني إنك مش هتسيبيني زي ما الكل سابني، وسيبتيني. مش زعلان من الرحيل، زعلان من الوعد. الوعد كان تقيل أوي علشان يتنسى.','',90,108],
+    ['عمر','thanks','كل ما أتعب أفتكر إنك قلتلي «كمّل، أنا واثق فيك». ماكنتش أعرف إن جملة بسيطة ممكن تشيل واحد سنين. شكراً يا عمر إنك آمنت بيا قبل ما أؤمن بنفسي.','م',100,83],
+    ['ياسمين','goodbye','لسه شنطتك على الشماعة زي ما سيبتيها. مش قادرة أحرّكها، كأنها لو فضلت مكانها هترجعي تاخديها. وحشتيني يا ياسمين، وحشتيني بشكل مش بيتقال.','رفيقة الغرفة',110,164],
+    ['علي','love','تعرف يا علي إني كنت بتعمد أتأخر على المترو علشان نمشي سوا؟ كنت بعدّ الدقايق اللي بنقضيها مع بعض. ماقلتش وقتها لأن الصداقة كانت مريحة، وخفت أخسرها.','ر',125,59],
+    ['فريدة','blame','مش عايزة اعتذارك يا فريدة، عايزة بس تعترفي إنك كنتي عارفة وسكتي. السكوت كان أصعب من أي كلمة.','',140,77],
+    ['كريم','thanks','كنت بتحط لي سندوتش في شنطتي من غير ما تقول. كنت فاكر إني مش واخد بالي. كنت واخد بالي يا كريم، وكنت بتعشّى بيه وأنا مبسوط إن في حد فاكرني.','صاحبك من الثانوي',150,94],
+    ['مريم','goodbye','ماكانش لازم نتخانق على حاجة صغيرة. كنت فاكرة إن الوقت كتير. النهارده بعدّ الأيام اللي ضاعت، وأتمنى لو أرجع ساعة واحدة بس أقولك فيها إني آسفة.','',160,138],
+    ['زينة','love','ضحكتك على نكتة سخيفة مني كانت أحلى جايزة أخدتها في حياتي. لسه مش قادر أقولها لك في وشك، فقلت أكتبها هنا يمكن توصلك.','ع',170,66],
+    ['طارق','blame','كنت أخويا الكبير، وأنا اللي كنت مستني تيجي تصالحني. مرت سنين وأنا لسه مستني. الكبرياء خسّرنا بعض يا طارق، وأنا زهقت أبقى أنا اللي يتصل.','أخوك',185,113],
+    ['سارة','thanks','يا سارة، يوم ما قلتيلي «متخافيش أنا جنبك» كنتي بتنقذيني من أسوأ ليلة في حياتي. إنتي ماتعرفيش، بس إنتي كنتي السبب إني كملت.','',200,156],
+    ['أحمد','goodbye','يا أحمد يا أخويا، لو كنت أعرف إن آخر ضحكة منك هتبقى بالشكل ده كنت فضلت أضحك أطول. بابا لسه بيقعد على كرسيك كل جمعة. الله يرحمك.','أخوك الصغير',220,201],
+    ['نور','love','كنتِ تحبين صوت المطر وأنا كنت أتضايق منه. اليوم أحبه لأنه يذكّرني بكِ. غريب أن الأشياء التي اختلفنا عليها هي التي صارت ذكرى.','',240,122],
+    ['عمر','blame','ماكنتش فاكر إن ثقتي فيك هتنكسر بالسهولة دي. مش هقول إنك خنتني، بس كنت أتمنى لو واجهتني بدل ما تحكي لغيري. العتاب أحسن من الغياب يا عمر.','',260,90],
+    ['ياسمين','thanks','شكراً إنك علمتيني إن الحب مش لازم يبقى دراما. إنتي علمتيني الهدوء، والحاجات الصغيرة، وكوباية الشاي الصبح. دلوقتي أنا مع حد تاني، بس طعم الهدوء ده منك.','',280,117],
+    ['علي','goodbye','الدنيا بقت أهدى من غيرك. مفيش حد يقولي «يلا نخرج» الساعة ١٢ بالليل. كل ما أعدّي من قدام الجامع أفتكر دعاءك اللي كنت بتقوله. الله يرحمك يا علي.','صاحبك',300,176],
+    ['فريدة','love','أنا مش بحبك زي ما الناس بتحب في الأفلام. أنا بحبك زي ما بحب البيت بعد يوم طويل: هادي ومريح، وبعرف طريقه حتى لو الدنيا ضلمة.','',320,148],
+    ['كريم','blame','كنت أتمنى لو كلمتني قبل ما تاخد قرارك. كنت هتفهم إني مش هقف قدامك، كنت بس هقف جنبك. الفرق بين الاتنين كبير يا كريم، وإنت ماعرفتوش.','أبوك',340,103],
+    ['مريم','thanks','ستي مريم، دعواتك الصبح كل يوم هي اللي كانت بتقوّمني. دلوقتي بدعي لنفسي بنفس الكلمات اللي كنتي بتقوليها، ومش مصدق إنها لسه ماشية معايا.','حفيدك',360,129],
+    ['زينة','goodbye','ماقدرتش أودّعك لأن الوداع كان محتاج شجاعة ماكانتش عندي. ركبت الطيارة وأنا بتمنى حد يوقفني. محدش وقفني، وده كان ردك.','',380,95],
+    ['طارق','love','عدّت عشر سنين، وإنت لسه بتدخل أحلامي بنفس القميص الأزرق. أنا اتجوزت وإنت اتجوزت، بس في ركن في قلبي لسه شغال على الوقت القديم.','',400,138],
+    ['ماما','thanks','يا ماما، أنا دايماً بقول إني كبرت وبعرف أتصرف، بس كل مرة بترسلي «أكلت؟» بحس إني لسه طفل. شكراً على كل لقمة وكل دعوة.','ابنك البعيد',420,232],
+    ['بابا','goodbye','كنت دايماً بتقول لي «هتفهمني لما تكبر». كبرت يا بابا وفهمت: ليه كنت بتسكت وإنت تعبان، وليه كنت بتبتسم وإنت مرهق. ياريتني فهمت وإنت لسه جنبي.','ابنتك',450,254],
+    ['هدى','blame','قلتي إنك بتحبيني، وبعدين اختفيتي من غير كلمة. مش عايز أعرف السبب، عايز بس أعرف إني ماكنتش مجنون وإن اللي كان بينا كان حقيقي.','',480,85],
+    ['يوسف','thanks','يا يوسف، إنت أول واحد قالي «إنتي كويسة كده». كنت بخبّي نفسي سنين، وإنت اللي خليتني أطلع. مش عارفة لو إنت فاكر، بس أنا فاكرة.','',500,72],
+    ['ليلى','love','ليلى، اسمك لوحده بقى بيخليني أبتسم. مش عايز أعدّ كام مرة كتبته ومسحته. بس لو عرفتي إني بحبك، مش لازم تردي. كفاية إنك تعرفي.','',520,81]
+  ];
+  const NOW0 = Date.now();
+  const SEED = SEED_RAW.map((r, i) => ({
+    id: 's' + (i + 1), recipient: r[0], mood: r[1], message: r[2], sender: r[3],
+    createdAt: NOW0 - r[4] * 3600e3, likes: r[5], src: 'seed'
+  }));
+
+  /* ---------- State ---------- */
+  const state = {
+    mood: 'all',
+    letters: [],
+    local: store.get('mk_letters', []),
+    cloud: [],
+    liked: new Set(store.get('mk_liked', [])),
+    hidden: new Set(store.get('mk_hidden', [])),
+    highlight: null,
+    animate: true,
+    lastSubmit: 0
+  };
+  const els = {
+    grid: $('#grid'), search: $('#search'), clear: $('#searchClear'), badge: $('#matchBadge'),
+    empty: $('#emptyState'), emptyText: $('#emptyText'), emptyWriteLabel: $('#emptyWriteLabel'),
+    total: $('#totalCount'), drawer: $('#drawer'), backdrop: $('#backdrop'),
+    form: $('#letterForm'), fRec: $('#fRecipient'), fMsg: $('#fMessage'), fSnd: $('#fSender'),
+    counter: $('#counter'), err: $('#formError'), toast: $('#toast'), toastMsg: $('#toastMsg'), toastAct: $('#toastAct')
+  };
+
+  function rebuild() {
+    const map = new Map();
+    [].concat(state.cloud, state.local, SEED).forEach(l => { if (!map.has(l.id)) map.set(l.id, l); });
+    state.letters = Array.from(map.values()).sort((a, b) => b.createdAt - a.createdAt);
+  }
+  const displayLikes = l => l.likes + ((l.src !== 'cloud' && state.liked.has(l.id)) ? 1 : 0);
+
+  /* ---------- Rendering ---------- */
+  function visible() {
+    const q = norm(els.search.value);
+    return state.letters.filter(l =>
+      !state.hidden.has(l.id) &&
+      (state.mood === 'all' || l.mood === state.mood) &&
+      (!q || matchesName(l.recipient, q)));
+  }
+
+  function cardHTML(l, i) {
+    const m = MOODS[l.mood] || MOODS.love;
+    const liked = state.liked.has(l.id);
+    const enter = state.animate ? ' enter' : '';
+    const glow = state.highlight === l.id ? ' glow' : '';
+    const delay = state.animate ? ' style="--accent:' + m.color + ';animation-delay:' + Math.min(i * 40, 480) + 'ms"' : ' style="--accent:' + m.color + '"';
+    return '<article class="card' + enter + glow + '"' + delay + ' data-id="' + esc(l.id) + '">' +
+      '<div class="flex items-start justify-between gap-2">' +
+        '<div class="to">إلى: <b>' + esc(l.recipient) + '</b></div>' +
+        '<span class="pill">' + m.emoji + ' ' + m.label + '</span>' +
+      '</div>' +
+      '<p class="poem">' + esc(l.message) + '</p>' +
+      (l.sender ? '<div class="from">— ' + esc(l.sender) + '</div>' : '<div class="from" style="opacity:.55">— مجهول</div>') +
+      '<div class="date mt-2">' + timeAgo(l.createdAt) + '</div>' +
+      '<div class="actions">' +
+        '<button type="button" class="act' + (liked ? ' liked' : '') + '" data-act="like" aria-pressed="' + liked + '" aria-label="لمست قلبي">' + icon('heart') + '<span class="lbl">لمست قلبي</span> <span class="cnt">' + fmt(displayLikes(l)) + '</span></button>' +
+        '<button type="button" class="act" data-act="story" aria-label="تحميل كستوري">' + icon('camera') + 'تحميل كـ ستوري</button>' +
+        '<button type="button" class="act report" data-act="report" aria-label="إبلاغ عن محتوى غير لائق" title="إبلاغ">' + icon('flag') + '</button>' +
+      '</div></article>';
+  }
+  const adCardHTML = () => '<div class="ad-slot ad-card" role="complementary" aria-label="مساحة إعلانية"><span>مساحة إعلانية</span><!-- AdSense in-feed unit --></div>';
+
+  function render() {
+    const list = visible();
+    const raw = els.search.value.trim();
+    els.clear.classList.toggle('show', !!raw);
+
+    // badge
+    if (raw) {
+      const n = list.length;
+      els.badge.innerHTML = n
+        ? '<span class="match-badge">✉️ وجدنا <b>' + countWord(n) + '</b> موجهة لـ <b>' + esc(raw) + '</b></span>'
+        : '<span class="match-badge none">لم نجد رسائل موجهة لـ <b>' + esc(raw) + '</b> بعد</span>';
+    } else els.badge.innerHTML = '';
+
+    // grid
+    if (!list.length) {
+      els.grid.innerHTML = '';
+      els.empty.classList.remove('hidden');
+      els.emptyText.textContent = raw ? 'لا توجد رسائل موجهة لـ «' + raw + '» حتى الآن.' : 'لا توجد رسائل في هذا التصنيف بعد.';
+      els.emptyWriteLabel.textContent = raw ? 'اكتب أول رسالة لـ ' + raw : 'اكتب رسالة سرية';
+    } else {
+      els.empty.classList.add('hidden');
+      const mid = Math.floor(list.length / 2);
+      let html = '';
+      list.forEach((l, i) => {
+        if (list.length >= 6 && i === mid) html += adCardHTML();
+        html += cardHTML(l, i);
+      });
+      els.grid.innerHTML = html;
+    }
+    els.total.textContent = fmt(state.letters.filter(l => !state.hidden.has(l.id)).length);
+    state.animate = false;
+  }
+
+  /* ---------- Toast ---------- */
+  let toastTimer;
+  function toast(msg, actLabel, actFn) {
+    els.toastMsg.textContent = msg;
+    if (actLabel) { els.toastAct.textContent = actLabel; els.toastAct.classList.remove('hidden'); els.toastAct.onclick = () => { actFn && actFn(); els.toast.classList.remove('show'); }; }
+    else { els.toastAct.classList.add('hidden'); els.toastAct.onclick = null; }
+    els.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => els.toast.classList.remove('show'), actLabel ? 6000 : 3200);
+  }
+
+  /* ---------- Search & filters ---------- */
+  els.search.addEventListener('input', render);
+  els.clear.addEventListener('click', () => { els.search.value = ''; render(); els.search.focus(); });
+  $('#nameHints').addEventListener('click', e => {
+    const b = e.target.closest('[data-name]'); if (!b) return;
+    els.search.value = b.dataset.name; render();
+    $('#grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('#moodFilters').addEventListener('click', e => {
+    const b = e.target.closest('[data-mood]'); if (!b) return;
+    state.mood = b.dataset.mood;
+    $$('#moodFilters .chip').forEach(c => { const on = c === b; c.classList.toggle('active', on); c.setAttribute('aria-selected', on); });
+    state.animate = true; render();
+  });
+
+  /* ---------- Card actions (delegation) ---------- */
+  els.grid.addEventListener('click', e => {
+    const btn = e.target.closest('[data-act]'); if (!btn) return;
+    const card = btn.closest('.card'); const l = state.letters.find(x => x.id === card.dataset.id); if (!l) return;
+    const act = btn.dataset.act;
+    if (act === 'like') toggleLike(l, btn);
+    else if (act === 'story') makeStory(l);
+    else if (act === 'report') reportLetter(l);
+  });
+
+  function toggleLike(l, btn) {
+    const was = state.liked.has(l.id);
+    if (was) state.liked.delete(l.id); else state.liked.add(l.id);
+    store.set('mk_liked', Array.from(state.liked));
+    if (l.src === 'cloud') {
+      l.likes = Math.max(0, l.likes + (was ? -1 : 1));
+      if (sb) sb.rpc('increment_likes', { row_id: l.id, delta: was ? -1 : 1 }).then(() => {}, () => {});
+    }
+    btn.classList.toggle('liked', !was);
+    btn.setAttribute('aria-pressed', String(!was));
+    btn.querySelector('.cnt').textContent = fmt(displayLikes(l));
+  }
+
+  function reportLetter(l) {
+    state.hidden.add(l.id); store.set('mk_hidden', Array.from(state.hidden));
+    if (sb && l.src === 'cloud') sb.from('reports').insert({ letter_id: l.id }).then(() => {}, () => {});
+    render();
+    toast('تم إخفاء الرسالة وتسجيل بلاغك. شكراً لحمايتك الأرشيف.', 'تراجع', () => {
+      state.hidden.delete(l.id); store.set('mk_hidden', Array.from(state.hidden)); render();
+    });
+  }
+
+  /* ---------- Drawer ---------- */
+  let lastFocus = null, mood = 'love';
+  function openDrawer(prefill) {
+    lastFocus = document.activeElement;
+    if (typeof prefill === 'string' && prefill) els.fRec.value = prefill.slice(0, CONFIG.MAX_NAME);
+    els.drawer.classList.add('open'); els.backdrop.classList.add('open'); els.drawer.setAttribute('aria-hidden', 'false');
+    setTimeout(() => (els.fRec.value ? els.fMsg : els.fRec).focus(), 350);
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    els.drawer.classList.remove('open'); els.backdrop.classList.remove('open'); els.drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  document.addEventListener('click', e => { if (e.target.closest('[data-open-drawer]')) openDrawer(); });
+  $('#drawerClose').addEventListener('click', closeDrawer);
+  els.backdrop.addEventListener('click', closeDrawer);
+  $('#emptyWrite').addEventListener('click', () => openDrawer(els.search.value.trim()));
+
+  $('#moodPick').addEventListener('click', e => {
+    const b = e.target.closest('[data-mood]'); if (!b) return;
+    mood = b.dataset.mood;
+    $$('#moodPick .mood-btn').forEach(x => x.setAttribute('aria-checked', String(x === b)));
+  });
+
+  function updateCounter() {
+    const n = els.fMsg.value.length;
+    els.counter.textContent = fmt(n) + ' / ' + fmt(CONFIG.MAX_MSG);
+    els.counter.classList.toggle('warn', n > CONFIG.MAX_MSG * 0.85 && n < CONFIG.MAX_MSG);
+    els.counter.classList.toggle('max', n >= CONFIG.MAX_MSG);
+  }
+  els.fMsg.addEventListener('input', updateCounter);
+
+  // Anonymity & safety checks
+  const RE_URL = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|net|org|io|me|app|co|info)\b)/i;
+  const RE_EMAIL = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+  const RE_PHONE = /(\+?\d[\d\s\-().]{7,}\d)/;
+  const BANNED = ['شرموط', 'عرص', 'ابن كلب', 'ابن الكلب', 'متناك', 'كسم']; // extend as needed
+  function toWestern(s) { return s.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)); }
+  function validate(rec, msg, snd) {
+    if (!rec) return 'اكتب اسم الشخص الذي تتوجه إليه.';
+    if (msg.length < 10) return 'الرسالة قصيرة جداً.. اكتب ولو بضع كلمات صادقة (١٠ أحرف على الأقل).';
+    const all = [rec, msg, snd].join(' ');
+    const western = toWestern(all);
+    if (RE_URL.test(all) || RE_EMAIL.test(all)) return 'لحماية المجهولية لا نسمح بالروابط أو البريد الإلكتروني.';
+    if (RE_PHONE.test(western)) return 'لحماية المجهولية لا نسمح بأرقام الهواتف.';
+    const n = norm(all);
+    if (BANNED.some(w => n.includes(norm(w)))) return 'تحتوي الرسالة على ألفاظ مسيئة. نرجو تهذيبها حسب معايير النشر.';
+    return '';
+  }
+  function showErr(t) { els.err.textContent = t; els.err.classList.toggle('hidden', !t); }
+
+  els.form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if ($('#fWebsite').value) return; // bot
+    const rec = els.fRec.value.trim().slice(0, CONFIG.MAX_NAME);
+    const msg = els.fMsg.value.trim().slice(0, CONFIG.MAX_MSG);
+    const snd = els.fSnd.value.trim().slice(0, CONFIG.MAX_SENDER);
+    const bad = validate(rec, msg, snd);
+    if (bad) return showErr(bad);
+    if (Date.now() - state.lastSubmit < CONFIG.COOLDOWN_MS) return showErr('على مهلك.. انتظر لحظات قبل إيداع رسالة أخرى.');
+    showErr('');
+    const btn = $('#submitBtn'); btn.disabled = true; btn.style.opacity = '.7';
+
+    let letter = {
+      id: 'l_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      recipient: rec, message: msg, mood, sender: snd, likes: 0, createdAt: Date.now(), src: 'local'
+    };
+    let saved = false;
+    if (sb) {
+      try {
+        const { data, error } = await sb.from('letters').insert({ recipient: rec, message: msg, mood, sender: snd || null, likes: 0 }).select().single();
+        if (error) throw error;
+        letter = normalizeRow(data); state.cloud.unshift(letter); saved = true;
+      } catch (err) { console.warn('[MaktobLak] Cloud insert failed, falling back to local:', err); }
+    }
+    if (!saved) { state.local.unshift(letter); store.set('mk_letters', state.local.slice(0, 200)); }
+
+    state.lastSubmit = Date.now();
+    rebuild();
+    // reset UI
+    els.form.reset(); mood = 'love';
+    $$('#moodPick .mood-btn').forEach(x => x.setAttribute('aria-checked', String(x.dataset.mood === 'love')));
+    updateCounter();
+    btn.disabled = false; btn.style.opacity = '';
+    closeDrawer();
+    $('#sent').classList.add('open');
+    setTimeout(() => {
+      $('#sent').classList.remove('open');
+      els.search.value = ''; state.mood = 'all';
+      $$('#moodFilters .chip').forEach(c => { const on = c.dataset.mood === 'all'; c.classList.toggle('active', on); c.setAttribute('aria-selected', on); });
+      state.highlight = letter.id; state.animate = false; render();
+      const el = els.grid.querySelector('[data-id="' + letter.id + '"]');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => { state.highlight = null; }, 3000);
+    }, 2500);
+  });
+
+  /* ---------- Info modals ---------- */
+  const INFO = {
+    privacy: {
+      title: 'سياسة الخصوصية وحماية المجهولية',
+      html: '<p>MaktobLak مساحة للبوح، وأول التزاماتنا أن تبقى هويتك بعيدة عنها.</p>' +
+        '<h4>ما لا نطلبه</h4><ul><li>لا حسابات ولا بريد إلكتروني ولا أرقام هواتف.</li><li>لا نطلب منك اسمك الحقيقي، ولا نربط الرسائل بهوية أي شخص.</li></ul>' +
+        '<h4>ما نحفظه</h4><ul><li>نص الرسالة، واسم المستلم كما كتبته، وشعور الرسالة، والتوقيع الاختياري، ووقت الإيداع.</li><li>لا نربط الرسائل بعنوان IP أو بجهازك ضمن بيانات الرسالة.</li></ul>' +
+        '<h4>التخزين المحلي</h4><p>تُحفظ في متصفحك فقط: إعجاباتك، والرسائل التي أخفيتها، ونسخة من رسائلك في وضع التخزين المحلي. يمكنك حذفها بمسح بيانات الموقع.</p>' +
+        '<h4>الإعلانات وملفات الارتباط</h4><p>قد تعرض أطراف ثالثة مثل Google AdSense إعلانات وتستخدم ملفات تعريف الارتباط لتخصيصها. يمكنك إدارة تفضيلات الإعلانات من إعدادات حسابك في Google.</p>' +
+        '<h4>حذف رسالة</h4><p>إن رأيت رسالة تكشف هويتك أو تمسّك، استخدم زر الإبلاغ، أو راسلنا على hello@' + esc(CONFIG.SITE_DOMAIN) + ' مع نص الرسالة وسنحذفها.</p>' +
+        '<h4>تنبيه مهم</h4><p>لا تكتب أسماء كاملة أو أرقاماً أو عناوين أو روابط. نمنع نشرها تلقائياً ونحذف ما يتسلل منها.</p>'
+    },
+    standards: {
+      title: 'معايير النشر ومكافحة التنمر',
+      html: '<p>هذا مكان للمشاعر لا للأذى. نطبّق سياسة عدم التسامح مع ما يلي:</p>' +
+        '<ul><li>خطاب الكراهية أو التمييز بسبب الدين أو العرق أو الجنس أو الإعاقة أو الجنسية.</li><li>التنمر أو السخرية أو الإساءة الموجهة إلى شخص بعينه، أو تحريض الآخرين عليه.</li><li>التهديد أو الابتزاز أو الدعوة إلى العنف.</li><li>كشف هوية أشخاص: أسماء كاملة، حسابات، أرقام، عناوين، أماكن عمل أو دراسة.</li><li>المحتوى الجنسي الصريح أو أي محتوى يمس القاصرين.</li><li>الإعلانات والروابط والترويج.</li></ul>' +
+        '<h4>العتاب مسموح.. والإهانة لا</h4><p>يمكنك أن تعاتب وتغضب وتحزن بصدق، لكن دون سبّ أو تشهير. الغاية أن تفرّغ ما بداخلك لا أن تجرح غيرك.</p>' +
+        '<h4>الإبلاغ</h4><p>زر 🚩 على كل بطاقة يخفي الرسالة فوراً من شاشتك ويرسل بلاغاً للمراجعة. نحذف المخالفات دون إنذار.</p>' +
+        '<h4>إن كنت تمر بوقت صعب</h4><p>إن كانت كلماتك تعبّر عن رغبة في إيذاء نفسك، فأنت تستحق دعماً حقيقياً. تحدث إلى شخص تثق به أو إلى مختص أو خط مساندة نفسية في بلدك الآن.</p>'
+    },
+    terms: {
+      title: 'شروط الاستخدام وعن المنصة',
+      html: '<h4>عن MaktobLak</h4><p>«مكتوب لك» — جوابات ما وصلتش — أرشيف رقمي مجهول للرسائل التي لم تُرسل. نؤمن أن الكتابة تخفف الثقل، وأن قراءة كلمات الآخرين تذكّرنا بأننا لسنا وحدنا.</p>' +
+        '<h4>الشروط</h4><ul><li>باستخدامك الموقع تؤكد أن عمرك ١٣ عاماً فأكثر.</li><li>أنت وحدك مسؤول عن محتوى ما تكتبه، وتقرّ بأنه لا ينتهك حقوق أحد ولا يخالف معايير النشر.</li><li>الرسائل أعمال تعبيرية مجهولة المصدر، ولا تمثل رأي المنصة.</li><li>يحق لنا حذف أي محتوى أو تقييد الوصول دون إشعار مسبق.</li><li>الأسماء الواردة في الرسائل لا تشير بالضرورة إلى أشخاص حقيقيين، وبعض الرسائل التجريبية مكتوبة لإثراء التجربة.</li></ul>' +
+        '<h4>إخلاء مسؤولية</h4><p>المنصة للتعبير الشخصي ولا تقدّم علاجاً نفسياً أو استشارة طبية، ولا تُغني عن مختص.</p>' +
+        '<h4>تواصل معنا</h4><p>hello@' + esc(CONFIG.SITE_DOMAIN) + '</p>'
+    }
+  };
+  function openInfo(key) {
+    const d = INFO[key]; if (!d) return;
+    $('#infoTitle').textContent = d.title; $('#infoBody').innerHTML = d.html;
+    $('#infoModal').classList.add('open'); document.body.style.overflow = 'hidden';
+  }
+  document.addEventListener('click', e => {
+    const i = e.target.closest('[data-info]'); if (i) openInfo(i.dataset.info);
+    if (e.target.closest('[data-close-modal]')) closeModals();
+    if (e.target.classList && e.target.classList.contains('modal')) closeModals();
+  });
+  function closeModals() {
+    $$('.modal.open').forEach(m => m.classList.remove('open'));
+    if (!els.drawer.classList.contains('open')) document.body.style.overflow = '';
+    if (storyUrl) { URL.revokeObjectURL(storyUrl); storyUrl = null; }
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModals(); if (els.drawer.classList.contains('open')) closeDrawer(); }
+  });
+
+  /* ================= VIRAL STORY ENGINE ================= */
+  let storyUrl = null, storyBlob = null, storyFile = null;
+  const canShareFiles = f => !!(navigator.canShare && navigator.share && navigator.canShare({ files: [f] }));
+
+  async function makeStory(l) {
+    if (typeof html2canvas === 'undefined') return toast('تعذّر تحميل أداة الصور. تحقق من اتصالك بالإنترنت.');
+    $('#storyLoading').classList.remove('hidden'); $('#storyReady').classList.add('hidden');
+    $('#storyModal').classList.add('open'); document.body.style.overflow = 'hidden';
+
+    const m = MOODS[l.mood] || MOODS.love;
+    const len = l.message.length;
+    const fs = len > 270 ? 52 : len > 190 ? 60 : len > 120 ? 68 : 78;
+    const stage = document.createElement('div');
+    stage.setAttribute('dir', 'rtl');
+    stage.style.cssText = 'position:absolute;left:-10000px;top:0;width:1080px;height:1920px;overflow:hidden;box-sizing:border-box;color:#f1ebe0;font-family:Cairo,sans-serif;' +
+      'background:radial-gradient(900px 700px at 85% 8%,' + m.color + '38,transparent 65%),radial-gradient(800px 700px at 8% 95%,' + m.color + '26,transparent 65%),linear-gradient(180deg,#0b0f17 0%,#121a2a 100%);';
+    stage.innerHTML =
+      // paper-grain lines
+      '<div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 2px,transparent 2px 6px);"></div>' +
+      // inner frame
+      '<div style="position:absolute;inset:48px;border:2px solid ' + m.color + '55;border-radius:36px;"></div>' +
+      '<div style="position:absolute;inset:64px;border:1px solid rgba(255,255,255,.07);border-radius:28px;"></div>' +
+      '<div style="position:relative;height:100%;box-sizing:border-box;padding:150px 130px 130px;display:flex;flex-direction:column;align-items:center;">' +
+        '<div style="display:flex;align-items:center;gap:18px;opacity:.9;">' +
+          '<div style="width:70px;height:70px;border-radius:20px;background:' + m.color + '22;border:2px solid ' + m.color + '66;display:flex;align-items:center;justify-content:center;font-size:36px;">✉️</div>' +
+          '<div style="font-weight:800;font-size:46px;">MaktobLak</div>' +
+        '</div>' +
+        '<div style="flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">' +
+          '<div style="font-size:42px;color:#9aa4b5;margin-bottom:6px;">إلى</div>' +
+          '<div style="font-family:\'Aref Ruqaa\',\'Amiri\',serif;font-weight:700;font-size:' + (l.recipient.length > 12 ? 120 : 150) + 'px;line-height:1.5;color:' + m.color + ';">' + esc(l.recipient) + '</div>' +
+          '<div style="width:220px;height:3px;margin:26px 0 40px;background:linear-gradient(90deg,transparent,' + m.color + ',transparent);"></div>' +
+          '<div style="font-family:Amiri,serif;font-size:130px;line-height:.6;color:' + m.color + ';opacity:.75;height:70px;">“</div>' +
+          '<div style="font-family:Amiri,serif;font-size:' + fs + 'px;line-height:1.95;color:#f4eee3;white-space:pre-line;padding:0 10px;word-break:break-word;">' + esc(l.message) + '</div>' +
+          '<div style="font-family:Amiri,serif;font-size:130px;line-height:.6;color:' + m.color + ';opacity:.75;height:50px;margin-top:10px;">”</div>' +
+          '<div style="margin-top:46px;font-family:\'Aref Ruqaa\',Amiri,serif;font-size:50px;color:#cfc8bb;">— ' + esc(l.sender || 'مجهول') + '</div>' +
+          '<div style="margin-top:22px;padding:8px 26px;border-radius:999px;font-size:30px;color:' + m.color + ';background:' + m.color + '1f;border:2px solid ' + m.color + '55;">' + m.emoji + ' ' + m.label + '</div>' +
+        '</div>' +
+        '<div style="width:100%;text-align:center;border-top:2px dashed rgba(255,255,255,.14);padding-top:44px;">' +
+          '<div style="font-size:36px;color:#d9d2c5;font-weight:600;">رُفعت في: MaktobLak | جوابات ما وصلتش</div>' +
+          '<div style="font-size:28px;color:#7f8a9d;margin-top:10px;letter-spacing:3px;direction:ltr;">The Unsent Archive</div>' +
+          '<div style="display:inline-block;margin-top:24px;padding:10px 34px;border-radius:999px;font-size:30px;color:#0b0f17;background:' + m.color + ';font-weight:800;direction:ltr;">' + esc(CONFIG.SITE_DOMAIN) + '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(stage);
+
+    try {
+      if (document.fonts && document.fonts.load) {
+        await Promise.all([
+          document.fonts.load('80px "Aref Ruqaa"', l.recipient), document.fonts.load('60px "Amiri"', l.message),
+          document.fonts.load('40px "Cairo"', 'رُفعت في'), document.fonts.ready
+        ]);
+      }
+      const canvas = await html2canvas(stage, { scale: 1, width: 1080, height: 1920, windowWidth: 1080, windowHeight: 1920, backgroundColor: '#0b0f17', useCORS: true, logging: false });
+      storyBlob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      if (!storyBlob) throw new Error('empty blob');
+      if (storyUrl) URL.revokeObjectURL(storyUrl);
+      storyUrl = URL.createObjectURL(storyBlob);
+      storyFile = new File([storyBlob], 'maktoblak-' + l.id + '.png', { type: 'image/png' });
+      $('#storyImg').src = storyUrl;
+      $('#storyLoading').classList.add('hidden'); $('#storyReady').classList.remove('hidden');
+
+      const shareBtn = $('#storyShare'); const note = $('#storyNote');
+      if (canShareFiles(storyFile)) {
+        shareBtn.classList.remove('hidden');
+        note.textContent = 'اضغط مشاركة لإرسالها مباشرة إلى ستوري إنستغرام أو واتساب.';
+      } else {
+        shareBtn.classList.add('hidden');
+        downloadStory();
+        note.textContent = 'تم تنزيل الصورة تلقائياً. ارفعها إلى الستوري من معرض الصور.';
+      }
+    } catch (err) {
+      console.error('[MaktobLak] story failed', err);
+      closeModals();
+      toast('تعذّر إنشاء البطاقة. حاول مرة أخرى.');
+    } finally {
+      stage.remove();
+    }
+  }
+  function downloadStory() {
+    if (!storyUrl) return;
+    const a = document.createElement('a'); a.href = storyUrl; a.download = (storyFile && storyFile.name) || 'maktoblak-letter.png';
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  $('#storyDownload').addEventListener('click', downloadStory);
+  $('#storyShare').addEventListener('click', async () => {
+    try { await navigator.share({ files: [storyFile], title: 'MaktobLak — مكتوب لك', text: 'رسالة من أرشيف الرسائل التي لم تُرسل' }); }
+    catch (e) { if (e && e.name !== 'AbortError') downloadStory(); }
+  });
+
+  /* ================= CLOUD (Supabase) ================= */
+  function normalizeRow(r) {
+    return {
+      id: String(r.id), recipient: r.recipient, message: r.message, mood: MOODS[r.mood] ? r.mood : 'love',
+      sender: r.sender || '', likes: r.likes || 0, createdAt: new Date(r.created_at).getTime(), src: 'cloud'
+    };
+  }
+  function loadScript(src) {
+    return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+  }
+  async function initCloud() {
+    if (!USE_CLOUD) return;
+    try {
+      await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
+      sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+      const { data, error } = await sb.from('letters').select('*').order('created_at', { ascending: false }).limit(300);
+      if (error) throw error;
+      state.cloud = (data || []).map(normalizeRow);
+      rebuild(); state.animate = false; render();
+      // realtime: new letters from other visitors
+      sb.channel('maktoblak-letters')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'letters' }, payload => {
+          const l = normalizeRow(payload.new);
+          if (state.cloud.some(x => x.id === l.id)) return;
+          state.cloud.unshift(l); rebuild(); state.animate = false; render();
+        })
+        .subscribe();
+    } catch (err) {
+      console.warn('[MaktobLak] Cloud unavailable, running in local mode:', err);
+      sb = null;
+    }
+  }
+
+  /* ---------- Boot ---------- */
+  paintIcons();
+  $('#year').textContent = new Date().getFullYear();
+  updateCounter();
+  rebuild();
+  render();
+  initCloud();
+  // keep relative times fresh
+  setInterval(() => { $$('.card').forEach(c => { const l = state.letters.find(x => x.id === c.dataset.id); const d = c.querySelector('.date'); if (l && d) d.textContent = timeAgo(l.createdAt); }); }, 60000);
+})();
+</script>
+</body>
+</html>
