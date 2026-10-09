@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MaktobLak | صراحة من نوع اخر</title>
+<title>مكتوب لك | MaktobLak — رسائل لم تُرسل بـ«بصمة سرية»</title>
 <meta name="description" content="MaktobLak (مكتوب لك) — جوابات ما وصلتش. مساحة مجهولة وآمنة لكتابة الرسائل التي عجزت عن إرسالها، أو البحث باسمك لاكتشاف ما كُتب لك سرّاً.">
 <meta name="theme-color" content="#0b0f17">
 <meta property="og:title" content="MaktobLak | صراحة من نوع اخر">
@@ -27,8 +27,8 @@
   };
 </script>
 
-<!-- html2canvas (Story engine) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- html-to-image (client-side Story card engine) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
 
 <!--
   GOOGLE ADSENSE: when your site is approved, paste your AdSense loader here:
@@ -198,6 +198,16 @@
   .floaty{ animation:floaty 5s ease-in-out infinite; }
 
   @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } html{ scroll-behavior:auto; } }
+  /* Evolved: clue, place, swatches */
+  .card{ background:linear-gradient(165deg,var(--bg,#1e1b4b),color-mix(in srgb,var(--bg,#1e1b4b) 55%,#05070c)); }
+  .clue{ margin-top:.85rem; padding:.7rem .9rem; border-radius:12px; border:1.5px dashed color-mix(in srgb,var(--accent) 60%,transparent); background:rgba(0,0,0,.24); }
+  .clue small{ display:flex; align-items:center; gap:.35rem; font-size:.72rem; font-weight:700; color:var(--accent); }
+  .clue p{ font-size:.95rem; line-height:1.8; color:#f4eee3; margin-top:.15rem; }
+  .place{ display:inline-flex; align-items:center; gap:.25rem; font-size:.76rem; color:#c3cbda; }
+  .swatch{ width:2.2rem; height:2.2rem; border-radius:50%; border:2px solid rgba(255,255,255,.18); transition:transform .2s, box-shadow .2s; }
+  .swatch[aria-checked="true"]{ border-color:#fff; transform:scale(1.12); box-shadow:0 0 0 3px rgba(255,255,255,.2); }
+  .scroll-row{ display:flex; gap:.5rem; overflow-x:auto; padding-bottom:.4rem; scrollbar-width:none; }
+  .scroll-row::-webkit-scrollbar{ display:none; }
 </style>
 </head>
 
@@ -230,7 +240,7 @@
     <section class="hero max-w-6xl mx-auto px-4 pt-14 sm:pt-24 pb-10 text-center">
       <p class="font-hand text-rose-300/90 text-lg floaty">جوابات ما وصلتش</p>
       <h1 class="font-hand font-bold text-4xl sm:text-6xl" style="text-shadow:0 6px 40px rgba(251,113,133,.25)">صراحة من نوع اخر</h1>
-      <p class="tagline text-slate-300/90 text-base sm:text-lg max-w-xl mx-auto leading-loose">اكتب الرسالة التي عجزت عن إرسالها.. أو ابحث باسمك واكتشف ما كُتب لك سرّاً.</p>
+      <p class="tagline text-slate-300/90 text-base sm:text-lg max-w-xl mx-auto leading-loose">ابحث باسمك، ثم طابق «البصمة السرية» لتعرف إن كانت الرسالة لك. أو اكتب ما عجزت عن قوله واترك بصمة لا يفهمها غيره.</p>
 
       <form class="search-wrap" role="search" onsubmit="return false">
         <label for="search" class="sr-only">ابحث باسمك</label>
@@ -251,14 +261,16 @@
 
       <div class="mt-5 min-h-[2.6rem] flex items-center justify-center" aria-live="polite"><div id="matchBadge"></div></div>
 
-      <!-- Emotion filters -->
+      <!-- Category + place filters -->
       <div class="flex flex-wrap gap-2 justify-center pb-2 px-1" id="moodFilters" role="tablist" aria-label="تصفية حسب الشعور">
         <button type="button" class="chip active" data-mood="all" style="--accent:#e5e7eb" role="tab" aria-selected="true">الكل 🌐</button>
-        <button type="button" class="chip" data-mood="love" style="--accent:#fb7185" role="tab" aria-selected="false">حنين واعتراف 🌸</button>
-        <button type="button" class="chip" data-mood="blame" style="--accent:#38bdf8" role="tab" aria-selected="false">عتاب 💙</button>
-        <button type="button" class="chip" data-mood="thanks" style="--accent:#fbbf24" role="tab" aria-selected="false">امتنان 💛</button>
-        <button type="button" class="chip" data-mood="goodbye" style="--accent:#94a3b8" role="tab" aria-selected="false">وداع 🖤</button>
+        <button type="button" class="chip" data-mood="حنين" style="--accent:#c4b5fd" role="tab" aria-selected="false">حنين 🌙</button>
+        <button type="button" class="chip" data-mood="اعتراف" style="--accent:#fb7185" role="tab" aria-selected="false">اعتراف 💌</button>
+        <button type="button" class="chip" data-mood="عتاب" style="--accent:#38bdf8" role="tab" aria-selected="false">عتاب 💙</button>
+        <button type="button" class="chip" data-mood="امتنان" style="--accent:#fbbf24" role="tab" aria-selected="false">امتنان 💛</button>
+        <button type="button" class="chip" data-mood="وداع" style="--accent:#94a3b8" role="tab" aria-selected="false">وداع 🖤</button>
       </div>
+      <div id="placeFilters" class="scroll-row mt-3 sm:justify-center sm:flex-wrap" aria-label="تصفية حسب المكان أو الجامعة"></div>
       <p class="text-xs text-slate-500 mt-5"><span id="totalCount">0</span> رسالة محفوظة في الأرشيف</p>
     </section>
 
@@ -340,12 +352,25 @@
     </div>
 
     <div class="mt-5">
+      <label for="fClue" class="block text-sm font-semibold text-slate-200 mb-1">🔑 البصمة السرية</label>
+      <p class="text-xs text-slate-500 mb-2">تفصيلة لا يعرفها إلا هو أو هي، بدون أسماء كاملة أو أرقام أو حسابات.</p>
+      <input id="fClue" class="field" maxlength="90" placeholder="مثال: اللي كانت بتشرب كراميل ماكياتو في مكتبة زايد 2022" required>
+    </div>
+
+    <div class="mt-5">
+      <label for="fPlace" class="block text-sm font-semibold text-slate-200 mb-2">📍 المكان أو الجامعة</label>
+      <input id="fPlace" class="field" maxlength="40" list="placeList" placeholder="مثال: جامعة القاهرة، الزمالك، محطة الرمل" required>
+      <datalist id="placeList"></datalist>
+    </div>
+
+    <div class="mt-5">
       <span class="block text-sm font-semibold text-slate-200 mb-2" id="moodLabel">ما شعور هذه الرسالة؟</span>
-      <div class="grid grid-cols-4 gap-2" role="radiogroup" aria-labelledby="moodLabel" id="moodPick">
-        <button type="button" class="mood-btn" role="radio" aria-checked="true" data-mood="love" style="--accent:#fb7185"><span class="em">🌸</span>حب / اعتراف</button>
-        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="blame" style="--accent:#38bdf8"><span class="em">💙</span>عتاب</button>
-        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="thanks" style="--accent:#fbbf24"><span class="em">💛</span>امتنان</button>
-        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="goodbye" style="--accent:#94a3b8"><span class="em">🖤</span>وداع</button>
+      <div class="grid grid-cols-5 gap-1.5" role="radiogroup" aria-labelledby="moodLabel" id="moodPick">
+        <button type="button" class="mood-btn" role="radio" aria-checked="true" data-mood="حنين" style="--accent:#c4b5fd"><span class="em">🌙</span>حنين</button>
+        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="اعتراف" style="--accent:#fb7185"><span class="em">💌</span>اعتراف</button>
+        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="عتاب" style="--accent:#38bdf8"><span class="em">💙</span>عتاب</button>
+        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="امتنان" style="--accent:#fbbf24"><span class="em">💛</span>امتنان</button>
+        <button type="button" class="mood-btn" role="radio" aria-checked="false" data-mood="وداع" style="--accent:#94a3b8"><span class="em">🖤</span>وداع</button>
       </div>
     </div>
 
@@ -355,6 +380,11 @@
         <span id="counter" class="counter">٠ / ٣٥٠</span>
       </div>
       <textarea id="fMessage" class="field" maxlength="350" placeholder="اكتب ما لم تستطع قوله.. كأنه لن يقرأه أحد سواه." required></textarea>
+    </div>
+
+    <div class="mt-5">
+      <span class="block text-sm font-semibold text-slate-200 mb-2" id="colorLabel">لون البطاقة</span>
+      <div class="flex gap-2.5 flex-wrap" role="radiogroup" aria-labelledby="colorLabel" id="colorPick"></div>
     </div>
 
     <div class="mt-5">
@@ -428,31 +458,7 @@
      CONFIG — fill the Supabase keys to switch to Cloud mode.
      Leave empty to run 100% on localStorage.
      ---------------------------------------------------------------
-     Supabase SQL (run once in the SQL editor):
-
-       create table public.letters (
-         id uuid primary key default gen_random_uuid(),
-         recipient text not null check (char_length(recipient) <= 30),
-         message   text not null check (char_length(message)   <= 350),
-         mood      text not null check (mood in ('love','blame','thanks','goodbye')),
-         sender    text check (char_length(sender) <= 24),
-         likes     int  not null default 0,
-         created_at timestamptz not null default now()
-       );
-       alter table public.letters enable row level security;
-       create policy "read letters"   on public.letters for select using (true);
-       create policy "insert letters" on public.letters for insert with check (likes = 0);
-
-       create or replace function public.increment_likes(row_id uuid, delta int)
-       returns void language sql security definer as $$
-         update public.letters set likes = greatest(likes + delta, 0) where id = row_id;
-       $$;
-
-       create table public.reports (id bigint generated always as identity primary key, letter_id uuid, created_at timestamptz default now());
-       alter table public.reports enable row level security;
-       create policy "insert reports" on public.reports for insert with check (true);
-
-       -- Enable Realtime on table "letters" (Database → Replication).
+     Supabase: run supabase.sql (see README) once in the SQL editor.
      --------------------------------------------------------------- */
   const CONFIG = {
     SUPABASE_URL: '',        // e.g. 'https://xxxx.supabase.co'
@@ -466,11 +472,16 @@
 
   /* ---------- Moods ---------- */
   const MOODS = {
-    love:    { label: 'حنين واعتراف',  emoji: '🌸', color: '#fb7185' },
-    blame:   { label: 'عتاب',          emoji: '💙', color: '#38bdf8' },
-    thanks:  { label: 'امتنان واشتياق', emoji: '💛', color: '#fbbf24' },
-    goodbye: { label: 'وداع وندم',     emoji: '🖤', color: '#94a3b8' }
+    'حنين':   { label: 'حنين',   emoji: '🌙', color: '#c4b5fd' },
+    'اعتراف': { label: 'اعتراف', emoji: '💌', color: '#fb7185' },
+    'عتاب':   { label: 'عتاب',   emoji: '💙', color: '#38bdf8' },
+    'امتنان': { label: 'امتنان', emoji: '💛', color: '#fbbf24' },
+    'وداع':   { label: 'وداع',   emoji: '🖤', color: '#94a3b8' }
   };
+  const LEG = { love: 'حنين', blame: 'عتاب', thanks: 'امتنان', goodbye: 'وداع' }; // old local data
+  const COLORS = ['#1e1b4b', '#3b0a24', '#0f2a2e', '#2a1a0a', '#14261a', '#1f2937', '#3a1030', '#0b1d3a'];
+  const bgOf = l => /^#[0-9a-f]{6}$/i.test(l.bg || '') ? l.bg : COLORS[0];
+  const legacy = l => Object.assign({}, l, { mood: MOODS[l.mood] ? l.mood : (LEG[l.mood] || 'حنين'), clue: l.clue || '', place: l.place || '' });
 
   /* ---------- Icons ---------- */
   const ICON = {
@@ -482,6 +493,8 @@
     send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
     share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
     download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+    pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+    key:'<path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
     mail:'<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>'
   };
   const icon = (n, cls) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ic ' + (cls || '') + '" aria-hidden="true">' + ICON[n] + '</svg>';
@@ -599,16 +612,19 @@
     ['ليلى','love','ليلى، اسمك لوحده بقى بيخليني أبتسم. مش عايز أعدّ كام مرة كتبته ومسحته. بس لو عرفتي إني بحبك، مش لازم تردي. كفاية إنك تعرفي.','',520,81]
   ];
   const NOW0 = Date.now();
+    const SX = [["اللي كانت بتقعد في الصف التاني جنب الشباك في مدرج ٣", "جامعة القاهرة"], ["يوم ما أبويا دخل المستشفى وإنت كنت مسافر الغردقة", "مدينة نصر"], ["مكالمات الفجر وإحنا بنذاكر لامتحان الإحصاء", "جامعة عين شمس"], ["اللي بيغني غلط في العربية على كورنيش المعادي", "المعادي"], ["الكافيه اللي ورا الجامعة، ترابيزة الشباك", "جامعة الإسكندرية"], ["كل مرة كنت بتقول «هنتكلم بعدين» على باب النادي", "مصر الجديدة"], ["ضحكنا في الكافتيريا والدنيا مقلوبة بعد النتيجة", "جامعة المنصورة"], ["آخر مرة اتكلمنا كانت على باب مستشفى الجامعة", "طنطا"], ["الكراسة الزرقا اللي فيها القصايد في مكتبة المدرسة", "الزمالك"], ["اللي شالت مشروع التخرج لوحدها", "جامعة حلوان"], ["الأستاذ اللي كان بيقول «الغلط مش عيب»", "جامعة القاهرة"], ["مطعم الكشري اللي كنا بنتقابل فيه كل خميس", "وسط البلد"], ["اللي بتدخل المكتب الساعة ٩ وفي إيدها قهوة", "التجمع الخامس"], ["وعد «مش هسيبك» على كوبري قصر النيل بعد الفجر", "كوبري قصر النيل"], ["جملة «كمّل، أنا واثق فيك» ليلة تسليم المشروع", "جامعة عين شمس"], ["كافيه الكورنيش اللي كان بيشغل فيروز", "محطة الرمل"], ["مترو حلوان، وإحنا بنأخر نفسنا عن قصد", "المعادي"], ["سكتّي لما عرفتي اللي حصل في الرحلة", "المهندسين"], ["ساندوتش الفول اللي في شنطتي من غير ما حد يقول", "شبرا"], ["خناقة صغيرة قدام بوابة الكلية", "جامعة الإسكندرية"], ["ضحكتك على نكتة «الأتوبيس» السخيفة", "جامعة المنصورة"], ["خناقتنا على ماتش الأهلي والزمالك واحنا إخوات", "الهرم"], ["ليلة «متخافيش أنا جنبك» على سطح البيت", "طنطا"], ["كرسي أخويا اللي بيقعد عليه بابا يوم الجمعة", "الجيزة"], ["صوت المطر على شباك الأوضة في الشتا", "الإسكندرية"], ["اللي حكى سر مكانش المفروض يتحكي", "6 أكتوبر"], ["كوباية الشاي بالنعناع كل صبح قبل المحاضرة", "جامعة حلوان"], ["جامع الحي ودعاء «ربنا يسترها»", "شبرا"], ["زي البيت بعد يوم طويل، قدام محطة المترو", "مصر الجديدة"], ["القرار اللي خدته من غير ما تسألني", "مدينة نصر"], ["ستي مريم ودعوة الصبح قبل الفجر", "المنصورة"], ["مطار القاهرة والطيارة اللي ما وقفتهاش", "مطار القاهرة"], ["القميص الأزرق في الحلم بعد عشر سنين", "الزمالك"], ["رسالة «أكلت؟» كل يوم", "الجيزة"], ["كرسيك في الصالة وابتسامتك وإنت تعبان", "طنطا"], ["اللي اختفت بعد «بحبك» بأسبوع", "الدقي"], ["أول واحد قال «إنتي كويسة كده» في حفلة التخرج", "جامعة القاهرة"], ["الاسم اللي كتبته ومسحته على مكتبة الكلية", "جامعة عين شمس"]];
+  const CONF = [12, 16, 20, 28, 37]; // love-seeds that are confessions (اعتراف)
   const SEED = SEED_RAW.map((r, i) => ({
-    id: 's' + (i + 1), recipient: r[0], mood: r[1], message: r[2], sender: r[3],
+    id: 's' + (i + 1), recipient: r[0], mood: CONF.includes(i) ? 'اعتراف' : LEG[r[1]], message: r[2], sender: r[3],
+    clue: SX[i][0], place: SX[i][1], bg: COLORS[i % COLORS.length],
     createdAt: NOW0 - r[4] * 3600e3, likes: r[5], src: 'seed'
   }));
 
   /* ---------- State ---------- */
   const state = {
-    mood: 'all',
+    mood: 'all', place: 'all',
     letters: [],
-    local: store.get('mk_letters', []),
+    local: store.get('mk_letters', []).map(legacy),
     cloud: [],
     liked: new Set(store.get('mk_liked', [])),
     hidden: new Set(store.get('mk_hidden', [])),
@@ -637,20 +653,23 @@
     return state.letters.filter(l =>
       !state.hidden.has(l.id) &&
       (state.mood === 'all' || l.mood === state.mood) &&
+      (state.place === 'all' || l.place === state.place) &&
       (!q || matchesName(l.recipient, q)));
   }
 
   function cardHTML(l, i) {
-    const m = MOODS[l.mood] || MOODS.love;
+    const m = MOODS[l.mood] || MOODS['حنين'];
     const liked = state.liked.has(l.id);
     const enter = state.animate ? ' enter' : '';
     const glow = state.highlight === l.id ? ' glow' : '';
-    const delay = state.animate ? ' style="--accent:' + m.color + ';animation-delay:' + Math.min(i * 40, 480) + 'ms"' : ' style="--accent:' + m.color + '"';
+    const delay = state.animate ? ' style="--bg:' + bgOf(l) + ';--accent:' + m.color + ';animation-delay:' + Math.min(i * 40, 480) + 'ms"' : ' style="--bg:' + bgOf(l) + ';--accent:' + m.color + '"';
     return '<article class="card' + enter + glow + '"' + delay + ' data-id="' + esc(l.id) + '">' +
       '<div class="flex items-start justify-between gap-2">' +
         '<div class="to">إلى: <b>' + esc(l.recipient) + '</b></div>' +
         '<span class="pill">' + m.emoji + ' ' + m.label + '</span>' +
       '</div>' +
+      (l.place ? '<div class="place mt-1">' + icon('pin') + esc(l.place) + '</div>' : '') +
+      (l.clue ? '<div class="clue"><small>' + icon('key') + 'البصمة السرية</small><p>' + esc(l.clue) + '</p></div>' : '') +
       '<p class="poem">' + esc(l.message) + '</p>' +
       (l.sender ? '<div class="from">— ' + esc(l.sender) + '</div>' : '<div class="from" style="opacity:.55">— مجهول</div>') +
       '<div class="date mt-2">' + timeAgo(l.createdAt) + '</div>' +
@@ -662,7 +681,23 @@
   }
   const adCardHTML = () => '<div class="ad-slot ad-card" role="complementary" aria-label="مساحة إعلانية"><span>مساحة إعلانية</span><!-- AdSense in-feed unit --></div>';
 
+  function renderPlaces() {
+    const c = {}; state.letters.forEach(l => { if (l.place && !state.hidden.has(l.id)) c[l.place] = (c[l.place] || 0) + 1; });
+    const top = Object.keys(c).sort((a, b) => c[b] - c[a]);
+    const chips = ['all'].concat(top.slice(0, 12)); if (!chips.includes(state.place)) chips.push(state.place);
+    const box = $('#placeFilters'), sc = box.scrollLeft;
+    box.innerHTML = chips.map(p => '<button type="button" class="chip' + (p === state.place ? ' active' : '') + '" style="--accent:#a5b4fc" data-place="' + esc(p) + '">' +
+      (p === 'all' ? '📍 كل الأماكن' : esc(p) + ' <span style="opacity:.6">' + fmt(c[p] || 0) + '</span>') + '</button>').join('');
+    box.scrollLeft = sc;
+    $('#placeList').innerHTML = top.map(p => '<option value="' + esc(p) + '">').join('');
+  }
+  $('#placeFilters').addEventListener('click', e => {
+    const b = e.target.closest('[data-place]'); if (!b) return;
+    state.place = b.dataset.place; state.animate = true; render();
+  });
+
   function render() {
+    renderPlaces();
     const list = visible();
     const raw = els.search.value.trim();
     els.clear.classList.toggle('show', !!raw);
@@ -755,7 +790,7 @@
   }
 
   /* ---------- Drawer ---------- */
-  let lastFocus = null, mood = 'love';
+  let lastFocus = null, mood = 'حنين';
   function openDrawer(prefill) {
     lastFocus = document.activeElement;
     if (typeof prefill === 'string' && prefill) els.fRec.value = prefill.slice(0, CONFIG.MAX_NAME);
@@ -779,6 +814,11 @@
     $$('#moodPick .mood-btn').forEach(x => x.setAttribute('aria-checked', String(x === b)));
   });
 
+  let bg = COLORS[0];
+  $('#colorPick').innerHTML = COLORS.map((c, i) => '<button type="button" class="swatch" role="radio" aria-checked="' + (i === 0) + '" aria-label="لون ' + fmt(i + 1) + '" data-c="' + c + '" style="background:' + c + '"></button>').join('');
+  function setBg(c) { bg = c; $$('#colorPick .swatch').forEach(x => x.setAttribute('aria-checked', String(x.dataset.c === c))); els.fMsg.style.background = c === COLORS[0] ? '' : c; }
+  $('#colorPick').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) setBg(b.dataset.c); });
+
   function updateCounter() {
     const n = els.fMsg.value.length;
     els.counter.textContent = fmt(n) + ' / ' + fmt(CONFIG.MAX_MSG);
@@ -793,10 +833,12 @@
   const RE_PHONE = /(\+?\d[\d\s\-().]{7,}\d)/;
   const BANNED = ['شرموط', 'عرص', 'ابن كلب', 'ابن الكلب', 'متناك', 'كسم']; // extend as needed
   function toWestern(s) { return s.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)); }
-  function validate(rec, msg, snd) {
+  function validate(rec, msg, snd, clue, place) {
     if (!rec) return 'اكتب اسم الشخص الذي تتوجه إليه.';
+    if (clue.length < 6) return 'اكتب بصمة سرية (٦ أحرف على الأقل) تجعله يعرف أن الرسالة له.';
+    if (place.length < 2) return 'اكتب المكان أو الجامعة المرتبطة بالرسالة.';
     if (msg.length < 10) return 'الرسالة قصيرة جداً.. اكتب ولو بضع كلمات صادقة (١٠ أحرف على الأقل).';
-    const all = [rec, msg, snd].join(' ');
+    const all = [rec, msg, snd, clue, place].join(' ');
     const western = toWestern(all);
     if (RE_URL.test(all) || RE_EMAIL.test(all)) return 'لحماية المجهولية لا نسمح بالروابط أو البريد الإلكتروني.';
     if (RE_PHONE.test(western)) return 'لحماية المجهولية لا نسمح بأرقام الهواتف.';
@@ -812,7 +854,8 @@
     const rec = els.fRec.value.trim().slice(0, CONFIG.MAX_NAME);
     const msg = els.fMsg.value.trim().slice(0, CONFIG.MAX_MSG);
     const snd = els.fSnd.value.trim().slice(0, CONFIG.MAX_SENDER);
-    const bad = validate(rec, msg, snd);
+    const clue = $('#fClue').value.trim().slice(0, 90), place = $('#fPlace').value.trim().slice(0, 40);
+    const bad = validate(rec, msg, snd, clue, place);
     if (bad) return showErr(bad);
     if (Date.now() - state.lastSubmit < CONFIG.COOLDOWN_MS) return showErr('على مهلك.. انتظر لحظات قبل إيداع رسالة أخرى.');
     showErr('');
@@ -820,12 +863,15 @@
 
     let letter = {
       id: 'l_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      recipient: rec, message: msg, mood, sender: snd, likes: 0, createdAt: Date.now(), src: 'local'
+      recipient: rec, message: msg, mood, sender: snd, clue, place, bg, likes: 0, createdAt: Date.now(), src: 'local'
     };
     let saved = false;
     if (sb) {
       try {
-        const { data, error } = await sb.from('letters').insert({ recipient: rec, message: msg, mood, sender: snd || null, likes: 0 }).select().single();
+        const row = { recipient_name: rec, shared_clue: clue, place_tag: place, category: mood, message: msg, bg_color: bg };
+        let r = await sb.from('letters').insert(snd ? Object.assign({ sender_alias: snd }, row) : row).select().single();
+        if (r.error && snd) r = await sb.from('letters').insert(row).select().single(); // table without the optional sender_alias column
+        const { data, error } = r;
         if (error) throw error;
         letter = normalizeRow(data); state.cloud.unshift(letter); saved = true;
       } catch (err) { console.warn('[MaktobLak] Cloud insert failed, falling back to local:', err); }
@@ -835,8 +881,8 @@
     state.lastSubmit = Date.now();
     rebuild();
     // reset UI
-    els.form.reset(); mood = 'love';
-    $$('#moodPick .mood-btn').forEach(x => x.setAttribute('aria-checked', String(x.dataset.mood === 'love')));
+    els.form.reset(); mood = 'حنين'; setBg(COLORS[0]);
+    $$('#moodPick .mood-btn').forEach(x => x.setAttribute('aria-checked', String(x.dataset.mood === 'حنين')));
     updateCounter();
     btn.disabled = false; btn.style.opacity = '';
     closeDrawer();
@@ -858,7 +904,7 @@
       title: 'سياسة الخصوصية وحماية المجهولية',
       html: '<p>MaktobLak مساحة للبوح، وأول التزاماتنا أن تبقى هويتك بعيدة عنها.</p>' +
         '<h4>ما لا نطلبه</h4><ul><li>لا حسابات ولا بريد إلكتروني ولا أرقام هواتف.</li><li>لا نطلب منك اسمك الحقيقي، ولا نربط الرسائل بهوية أي شخص.</li></ul>' +
-        '<h4>ما نحفظه</h4><ul><li>نص الرسالة، واسم المستلم كما كتبته، وشعور الرسالة، والتوقيع الاختياري، ووقت الإيداع.</li><li>لا نربط الرسائل بعنوان IP أو بجهازك ضمن بيانات الرسالة.</li></ul>' +
+        '<h4>ما نحفظه</h4><ul><li>نص الرسالة، واسم المستلم كما كتبته، والبصمة السرية، والمكان العام، وتصنيف الرسالة ولونها، والتوقيع الاختياري، ووقت الإيداع.</li><li>لا نربط الرسائل بعنوان IP أو بجهازك ضمن بيانات الرسالة.</li></ul>' +
         '<h4>التخزين المحلي</h4><p>تُحفظ في متصفحك فقط: إعجاباتك، والرسائل التي أخفيتها، ونسخة من رسائلك في وضع التخزين المحلي. يمكنك حذفها بمسح بيانات الموقع.</p>' +
         '<h4>الإعلانات وملفات الارتباط</h4><p>قد تعرض أطراف ثالثة مثل Google AdSense إعلانات وتستخدم ملفات تعريف الارتباط لتخصيصها. يمكنك إدارة تفضيلات الإعلانات من إعدادات حسابك في Google.</p>' +
         '<h4>حذف رسالة</h4><p>إن رأيت رسالة تكشف هويتك أو تمسّك، استخدم زر الإبلاغ، أو راسلنا على hello@' + esc(CONFIG.SITE_DOMAIN) + ' مع نص الرسالة وسنحذفها.</p>' +
@@ -867,7 +913,7 @@
     standards: {
       title: 'معايير النشر ومكافحة التنمر',
       html: '<p>هذا مكان للمشاعر لا للأذى. نطبّق سياسة عدم التسامح مع ما يلي:</p>' +
-        '<ul><li>خطاب الكراهية أو التمييز بسبب الدين أو العرق أو الجنس أو الإعاقة أو الجنسية.</li><li>التنمر أو السخرية أو الإساءة الموجهة إلى شخص بعينه، أو تحريض الآخرين عليه.</li><li>التهديد أو الابتزاز أو الدعوة إلى العنف.</li><li>كشف هوية أشخاص: أسماء كاملة، حسابات، أرقام، عناوين، أماكن عمل أو دراسة.</li><li>المحتوى الجنسي الصريح أو أي محتوى يمس القاصرين.</li><li>الإعلانات والروابط والترويج.</li></ul>' +
+        '<ul><li>خطاب الكراهية أو التمييز بسبب الدين أو العرق أو الجنس أو الإعاقة أو الجنسية.</li><li>التنمر أو السخرية أو الإساءة الموجهة إلى شخص بعينه، أو تحريض الآخرين عليه.</li><li>التهديد أو الابتزاز أو الدعوة إلى العنف.</li><li>كشف هوية أشخاص: أسماء كاملة، حسابات، أرقام، عناوين دقيقة، أو أماكن عمل محددة (المكان العام كالجامعة أو الحي أو المدينة مسموح).</li><li>المحتوى الجنسي الصريح أو أي محتوى يمس القاصرين.</li><li>الإعلانات والروابط والترويج.</li></ul>' +
         '<h4>العتاب مسموح.. والإهانة لا</h4><p>يمكنك أن تعاتب وتغضب وتحزن بصدق، لكن دون سبّ أو تشهير. الغاية أن تفرّغ ما بداخلك لا أن تجرح غيرك.</p>' +
         '<h4>الإبلاغ</h4><p>زر 🚩 على كل بطاقة يخفي الرسالة فوراً من شاشتك ويرسل بلاغاً للمراجعة. نحذف المخالفات دون إنذار.</p>' +
         '<h4>إن كنت تمر بوقت صعب</h4><p>إن كانت كلماتك تعبّر عن رغبة في إيذاء نفسك، فأنت تستحق دعماً حقيقياً. تحدث إلى شخص تثق به أو إلى مختص أو خط مساندة نفسية في بلدك الآن.</p>'
@@ -904,55 +950,47 @@
   const canShareFiles = f => !!(navigator.canShare && navigator.share && navigator.canShare({ files: [f] }));
 
   async function makeStory(l) {
-    if (typeof html2canvas === 'undefined') return toast('تعذّر تحميل أداة الصور. تحقق من اتصالك بالإنترنت.');
+    if (!window.htmlToImage) return toast('تعذّر تحميل أداة الصور. تحقق من اتصالك بالإنترنت.');
     $('#storyLoading').classList.remove('hidden'); $('#storyReady').classList.add('hidden');
     $('#storyModal').classList.add('open'); document.body.style.overflow = 'hidden';
 
-    const m = MOODS[l.mood] || MOODS.love;
-    const len = l.message.length;
-    const fs = len > 270 ? 52 : len > 190 ? 60 : len > 120 ? 68 : 78;
-    const stage = document.createElement('div');
-    stage.setAttribute('dir', 'rtl');
-    stage.style.cssText = 'position:absolute;left:-10000px;top:0;width:1080px;height:1920px;overflow:hidden;box-sizing:border-box;color:#f1ebe0;font-family:Cairo,sans-serif;' +
-      'background:radial-gradient(900px 700px at 85% 8%,' + m.color + '38,transparent 65%),radial-gradient(800px 700px at 8% 95%,' + m.color + '26,transparent 65%),linear-gradient(180deg,#0b0f17 0%,#121a2a 100%);';
-    stage.innerHTML =
-      // paper-grain lines
-      '<div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 2px,transparent 2px 6px);"></div>' +
-      // inner frame
-      '<div style="position:absolute;inset:48px;border:2px solid ' + m.color + '55;border-radius:36px;"></div>' +
-      '<div style="position:absolute;inset:64px;border:1px solid rgba(255,255,255,.07);border-radius:28px;"></div>' +
-      '<div style="position:relative;height:100%;box-sizing:border-box;padding:150px 130px 130px;display:flex;flex-direction:column;align-items:center;">' +
-        '<div style="display:flex;align-items:center;gap:18px;opacity:.9;">' +
-          '<div style="width:70px;height:70px;border-radius:20px;background:' + m.color + '22;border:2px solid ' + m.color + '66;display:flex;align-items:center;justify-content:center;font-size:36px;">✉️</div>' +
-          '<div style="font-weight:800;font-size:46px;">MaktobLak</div>' +
+    const m = MOODS[l.mood] || MOODS['حنين'], c = m.color, len = l.message.length;
+    const fs = len > 270 ? 44 : len > 190 ? 52 : len > 120 ? 60 : 70;
+    const host = document.createElement('div'); // off-screen wrapper; the captured node itself stays at 0,0
+    host.style.cssText = 'position:fixed;left:-10000px;top:0;width:1080px;height:1920px;pointer-events:none';
+    const node = document.createElement('div');
+    node.setAttribute('dir', 'rtl');
+    node.style.cssText = 'width:1080px;height:1920px;position:relative;overflow:hidden;box-sizing:border-box;color:#f1ebe0;font-family:Cairo,sans-serif;background:radial-gradient(900px 700px at 85% 6%,' + c + '40,transparent 65%),linear-gradient(170deg,' + bgOf(l) + ' 0%,#05070c 100%)';
+    node.innerHTML =
+      '<div style="position:absolute;inset:48px;border:2px solid ' + c + '55;border-radius:36px"></div>' +
+      '<div style="position:relative;height:100%;box-sizing:border-box;padding:110px 120px 90px;display:flex;flex-direction:column;align-items:center">' +
+        '<div style="display:flex;align-items:center;gap:16px;font-weight:800;font-size:46px"><span style="font-size:40px">✉️</span>MaktobLak</div>' +
+        '<div style="flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">' +
+          '<div style="font-size:40px;color:#9aa4b5">إلى</div>' +
+          '<div style="font-family:\'Aref Ruqaa\',Amiri,serif;font-weight:700;font-size:' + (l.recipient.length > 12 ? 100 : 120) + 'px;line-height:1.4;color:' + c + '">' + esc(l.recipient) + '</div>' +
+          (l.place ? '<div style="margin-top:8px;padding:6px 26px;border-radius:999px;font-size:32px;color:#e5e9f2;background:rgba(255,255,255,.1)">📍 ' + esc(l.place) + '</div>' : '') +
+          '<div style="font-family:Amiri,serif;font-size:' + fs + 'px;line-height:1.85;margin-top:40px;white-space:pre-line;word-break:break-word">“' + esc(l.message) + '”</div>' +
+          '<div style="margin-top:30px;font-family:\'Aref Ruqaa\',Amiri,serif;font-size:46px;color:#cfc8bb">— ' + esc(l.sender || 'مجهول') + '</div>' +
+          (l.clue ? '<div style="margin-top:40px;width:100%;box-sizing:border-box;padding:24px 34px;border-radius:28px;border:3px dashed ' + c + '99;background:rgba(0,0,0,.28)"><div style="font-size:30px;font-weight:700;color:' + c + '">🔑 البصمة السرية</div><div style="font-size:38px;line-height:1.6;margin-top:6px">' + esc(l.clue) + '</div></div>' : '') +
         '</div>' +
-        '<div style="flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">' +
-          '<div style="font-size:42px;color:#9aa4b5;margin-bottom:6px;">إلى</div>' +
-          '<div style="font-family:\'Aref Ruqaa\',\'Amiri\',serif;font-weight:700;font-size:' + (l.recipient.length > 12 ? 120 : 150) + 'px;line-height:1.5;color:' + m.color + ';">' + esc(l.recipient) + '</div>' +
-          '<div style="width:220px;height:3px;margin:26px 0 40px;background:linear-gradient(90deg,transparent,' + m.color + ',transparent);"></div>' +
-          '<div style="font-family:Amiri,serif;font-size:130px;line-height:.6;color:' + m.color + ';opacity:.75;height:70px;">“</div>' +
-          '<div style="font-family:Amiri,serif;font-size:' + fs + 'px;line-height:1.95;color:#f4eee3;white-space:pre-line;padding:0 10px;word-break:break-word;">' + esc(l.message) + '</div>' +
-          '<div style="font-family:Amiri,serif;font-size:130px;line-height:.6;color:' + m.color + ';opacity:.75;height:50px;margin-top:10px;">”</div>' +
-          '<div style="margin-top:46px;font-family:\'Aref Ruqaa\',Amiri,serif;font-size:50px;color:#cfc8bb;">— ' + esc(l.sender || 'مجهول') + '</div>' +
-          '<div style="margin-top:22px;padding:8px 26px;border-radius:999px;font-size:30px;color:' + m.color + ';background:' + m.color + '1f;border:2px solid ' + m.color + '55;">' + m.emoji + ' ' + m.label + '</div>' +
-        '</div>' +
-        '<div style="width:100%;text-align:center;border-top:2px dashed rgba(255,255,255,.14);padding-top:44px;">' +
-          '<div style="font-size:36px;color:#d9d2c5;font-weight:600;">رُفعت في: MaktobLak | جوابات ما وصلتش</div>' +
-          '<div style="font-size:28px;color:#7f8a9d;margin-top:10px;letter-spacing:3px;direction:ltr;">The Unsent Archive</div>' +
-          '<div style="display:inline-block;margin-top:24px;padding:10px 34px;border-radius:999px;font-size:30px;color:#0b0f17;background:' + m.color + ';font-weight:800;direction:ltr;">' + esc(CONFIG.SITE_DOMAIN) + '</div>' +
+        '<div style="width:100%;text-align:center;border-top:2px dashed rgba(255,255,255,.14);padding-top:30px">' +
+          '<div style="font-size:34px;color:#d9d2c5;font-weight:600">اكتب رسالتك السرية أو ابحث باسمك</div>' +
+          '<div style="display:inline-block;margin-top:18px;padding:10px 34px;border-radius:999px;font-size:32px;color:#0b0f17;background:' + c + ';font-weight:800;direction:ltr">' + esc(CONFIG.SITE_DOMAIN) + '</div>' +
         '</div>' +
       '</div>';
-    document.body.appendChild(stage);
+    host.appendChild(node); document.body.appendChild(host);
 
     try {
       if (document.fonts && document.fonts.load) {
         await Promise.all([
           document.fonts.load('80px "Aref Ruqaa"', l.recipient), document.fonts.load('60px "Amiri"', l.message),
-          document.fonts.load('40px "Cairo"', 'رُفعت في'), document.fonts.ready
+          document.fonts.load('40px "Cairo"', 'البصمة السرية'), document.fonts.ready
         ]);
       }
-      const canvas = await html2canvas(stage, { scale: 1, width: 1080, height: 1920, windowWidth: 1080, windowHeight: 1920, backgroundColor: '#0b0f17', useCORS: true, logging: false });
-      storyBlob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      const opt = { width: 1080, height: 1920, pixelRatio: 1, cacheBust: true };
+      const safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent); // Safari needs a warm-up render for fonts
+      const draw = async o => { if (safari) await htmlToImage.toBlob(node, o); return htmlToImage.toBlob(node, o); };
+      try { storyBlob = await draw(opt); } catch (e) { storyBlob = await draw(Object.assign({ skipFonts: true }, opt)); }
       if (!storyBlob) throw new Error('empty blob');
       if (storyUrl) URL.revokeObjectURL(storyUrl);
       storyUrl = URL.createObjectURL(storyBlob);
@@ -974,7 +1012,7 @@
       closeModals();
       toast('تعذّر إنشاء البطاقة. حاول مرة أخرى.');
     } finally {
-      stage.remove();
+      host.remove();
     }
   }
   function downloadStory() {
@@ -991,8 +1029,9 @@
   /* ================= CLOUD (Supabase) ================= */
   function normalizeRow(r) {
     return {
-      id: String(r.id), recipient: r.recipient, message: r.message, mood: MOODS[r.mood] ? r.mood : 'love',
-      sender: r.sender || '', likes: r.likes || 0, createdAt: new Date(r.created_at).getTime(), src: 'cloud'
+      id: String(r.id), recipient: r.recipient_name, message: r.message, mood: MOODS[r.category] ? r.category : 'حنين',
+      sender: r.sender_alias || '', clue: r.shared_clue || '', place: r.place_tag || '', bg: r.bg_color,
+      likes: r.likes_count || 0, createdAt: new Date(r.created_at).getTime(), src: 'cloud'
     };
   }
   function loadScript(src) {
@@ -1025,6 +1064,9 @@
   paintIcons();
   $('#year').textContent = new Date().getFullYear();
   updateCounter();
+  const qp = new URLSearchParams(location.search);
+  if (qp.get('q')) els.search.value = qp.get('q').slice(0, 40);
+  if (qp.get('place')) state.place = qp.get('place').slice(0, 40);
   rebuild();
   render();
   initCloud();
